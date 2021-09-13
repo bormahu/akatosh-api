@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "lib": ["es6", "dom"],
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "dist",//change the output directory
+    "resolveJsonModule": true, //to import out json database
+    "allowSyntheticDefaultImports": true
+   },
+   "include": [
+      "src/**/*.ts" //which kind of files to compile
+      ],
+  "exclude": [
+    "node_modules" //which files or directories to ignore
+    ]
+}
