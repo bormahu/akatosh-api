@@ -8,4 +8,5 @@ export default interface User{
   email: String
   password: String
   userCompany: String
+  userType: String
 }

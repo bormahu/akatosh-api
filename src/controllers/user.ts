@@ -19,7 +19,8 @@ export let addUser = (req:Request, res:Response, next:NextFunction) => {
     secondName: req.body.secondName,
     email: req.body.email,
     password: req.body.password,
-    userCompany: req.body.userCompany
+    userCompany: req.body.userCompany,
+    userType: req.body.userType
   }
   users.push(user)
   return res.status(201).send(user)
@@ -38,7 +39,8 @@ export let updateUser = (req:Request, res:Response, next: NextFunction) => {
   user.secondName = req.body.firstname || user.secondName
   user.email = req.body.email || user.email
   user.password = req.body.password || user.password
-  user.userCompany = req.body.userCompany || user.password
+  user.userCompany = req.body.userCompany || user.userCompany
+  user.userType = req.body.userType|| user.userType
 
   users[userIndex] = user
 
