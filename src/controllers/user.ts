@@ -1,12 +1,15 @@
 import { NextFunction, Request, Response } from 'express'
 import {default as User} from '../model/User'
+import {APILogger} from '../utils/logger'
 
 let users: Array<User> = []
 
 export let getUser = (req: Request, res:Response, next: NextFunction) => {
   const username = req.params.username
+  APILogger.logger.info(`[GET][/users]${username}`)
   const user = users.find(obj => obj.username === username)
   const httpStatusCode = user ? 200 : 404
+  
 
   return res.status(httpStatusCode).send(user)
 }
@@ -22,6 +25,7 @@ export let addUser = (req:Request, res:Response, next:NextFunction) => {
     userCompany: req.body.userCompany,
     userType: req.body.userType
   }
+  APILogger.logger.info(`[POST][/users]${user.username}`)
   users.push(user)
   return res.status(201).send(user)
 }
