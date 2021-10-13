@@ -3,8 +3,8 @@ import { Model, Sequelize, DataTypes } from 'sequelize';
 
 export default class Test extends Model {
     id: Number
-    firstName: String
-    secondName: String
+    first_name: String
+    last_name: String
     dob: Date
     email: String
 
@@ -16,18 +16,18 @@ export const UserMap = (sequelize:Sequelize) => {
             autoIncrement: true,
             primaryKey: true
         },
-        firstName: {
-            type: DataTypes.STRING(255)
+        first_name: {
+            type: DataTypes.STRING(60)
         },
-        secondName: {
-            type: DataTypes.STRING(255)
+        last_name: {
+            type: DataTypes.STRING(60)
         },
         dob: {
             type: DataTypes.DATE,
             allowNull: true
         },
         email: {
-            type: DataTypes.STRING(255)
+            type: DataTypes.STRING(60)
         }
 
     }, {

@@ -2,12 +2,14 @@ import * as bodyParser from 'body-parser'
 import * as express from 'express'
 import * as expressWinston from 'express-winston'
 import * as winston from 'winston'
+import "reflect-metadata"
 import {APIRoute} from '../src/routes/api'
 import { Index } from '../src/routes/index'
 import {CompanyRoute} from '../src/routes/company'
 import {UserRoute} from '../src/routes/user'
 import {TenementRoute} from '../src/routes/tenement'
 import {TestRoute} from '../src/routes/test'
+
 
 class App {
   public app: express.Application

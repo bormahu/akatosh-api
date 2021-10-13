@@ -1,22 +1,36 @@
+import { ConnectionOptions, Connection, createConnection, getConnection, createConnections } from 'typeorm';
 import { db_host, db_port, db_name, db_user, db_password } from "./config";
-import { Sequelize } from "sequelize";
+import 'reflect-metadata';
 import {APILogger} from './utils/logger'
 
-const sequelize = new Sequelize(db_name, db_user, db_password,{
+import { Test } from './entities/Test'
+
+
+
+export const config: ConnectionOptions = {
+    type: 'postgres',
     host: db_host,
     port: db_port,
-    dialect: 'postgres',
-    
-});
+    username: db_user, 
+    password: db_password,
+    database: db_name,
+    synchronize: true,
+    logging: false,
 
-const authenticate = async () => {
-    try {
-        await sequelize.authenticate()
-        APILogger.logger.info(`[DATABASE-SEQUELIZE] Connection has been established successfully`)
-    } catch (error) {
-        APILogger.logger.info(`CUSTOM ERROR HANDLER: ${error}`)
-    }
+    // Insert the entities
+    entities: [ Test ],
+
 }
-authenticate()
 
-export default sequelize;
+export const connect = async() => {
+    
+    let connection: Connection;
+
+    try {
+        connection = getConnection(config.name)
+        APILogger.logger.info(`[ TYPEORM ]: Connection has been established successfully`)
+    } catch (error){
+        connection = await createConnection(config)
+    }
+    return connection;
+}
