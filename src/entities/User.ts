@@ -14,7 +14,7 @@ export class User{
         unique: true,
         nullable: false
     })
-    username: String;
+    user_name: String;
 
     @Column("varchar", {
         name: "first_name",
