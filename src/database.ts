@@ -2,8 +2,6 @@ import { ConnectionOptions, Connection, createConnection, getConnection, createC
 import { db_host, db_port, db_name, db_user, db_password } from "./config";
 import 'reflect-metadata';
 import {APILogger} from './utils/logger'
-
-import { Test } from './entities/Test'
 import { User } from './entities/User'
 
 
@@ -19,7 +17,7 @@ export const config: ConnectionOptions = {
     logging: false,
 
     // Insert the entities
-    entities: [ Test, User ],
+    entities: [ User ],
 
 }
 
