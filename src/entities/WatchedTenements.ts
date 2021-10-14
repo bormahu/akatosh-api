@@ -5,71 +5,31 @@ import { Length } from 'class-validator'
 export class WatchedTenements {
 
     @PrimaryGeneratedColumn("uuid")
-    global_tenement_id: String;
+    watch_id: String;
 
-    @Column("varchar", {
-        name: "licence", 
-        length: 120, 
+    @Column("uuid", {
+        name: "tenement_id",
         nullable: false
     })
-    licence: String;
+    tenement_id: String;
 
-    @Column("varchar", {
-        name: "licence_special", 
-        length: 120, 
+    @Column("uuid", {
+        name: "owner_id",
+        nullable: false
+    })
+    owner_id: String;
+
+    @Column("timestamp with time zone", {
+        name: "watch_start_date",  
         nullable: true,
+        default: () => `now()`,
     })
-    licence_special: String;
+    watch_start_date: Date;
 
-    @Column("varchar", {
-        name: "survey_status", 
-        length: 120, 
-        nullable: false,
-    })
-    survey_status: String;
-
-    @Column("varchar", {
-        name: "tenement_status", 
-        length: 120, 
-        nullable: false,
-    })
-    tenement_status: String;
-
-    @Column("timestamp", {
-        name: "licnece_start_date",  
+    @Column("timestamp with time zone", {
+        name: "watch_last_update",  
         nullable: true,
+        default: () => `now()`,
     })
-    licence_start_date: Date;
-
-    @Column("timestamp", {
-        name: "licence_end_date",  
-        nullable: true,
-    })
-    licence_end_date: Date;
-
-    @Column("timestamp", {
-        name: "licence_grant_date",  
-        nullable: true,
-    })
-    licence_grant_date: Date;
-
-    @Column("varchar", {
-        name: "primary_tenement_holder", 
-        length: 120, 
-        nullable: true,
-    })
-    primary_tenement_holder: String;
-
-    @Column("decimal", {
-        name: "tenement_area", 
-        default: 0.0,
-    })
-    tenement_area: Number;
-
-    // geometry column may have to be adjusted to allow for correct support for geometries. 
-    @Column("geometry", {
-        name: "tenement_geometry",
-        nullable: true,
-    })
-    tenement_geometry: Object;
+    watch_last_update: Date;
 }

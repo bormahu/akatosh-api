@@ -109,7 +109,7 @@ export let removeUser = async (req:Request, res: Response, next: NextFunction) =
       APILogger.logger.info(`[DELETE][/users]: failed to find user: ${username}`);
       return res.status(404).send(`User ${username} does not exist`);
     }
-    
+
     await repo.delete({username: username});
     APILogger.logger.info(`[DELETE][/users]${username}`);
 
