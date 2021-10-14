@@ -24,13 +24,13 @@ export class Company {
     })
     company_location: String;
 
-    @Column("varchar", {
-        name: "company_signup_user_id", 
-        length: 100,
-        nullable: false,
-        unique: true,
-    })
-    company_signup_user_id: String;
+    // @Column("varchar", {
+    //     name: "company_signup_user_id", 
+    //     length: 100,
+    //     nullable: false,
+    //     unique: true,
+    // })
+    // company_signup_user_id: String;
 
     @Column("timestamp with time zone", {
         name: "company_account_creation_date",
