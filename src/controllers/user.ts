@@ -13,22 +13,25 @@ export let getUser = async (req: Request, res:Response, next: NextFunction) => {
     // Get the repo connection
     const repo = connection.getRepository(User);
 
-    const user_name = req.params.username;
-    APILogger.logger.info(`[GET][/users]${user_name}`);
+    const username = req.params.username;
+    APILogger.logger.info(`[GET][/users]${username}`);
 
     // Search the database by username
-    const user = await repo.findOne( { where: { user_name: user_name } } );
-
+    const user = await repo.findOne( { where: { username: username } } );
+    APILogger.logger.info(`[GET][/users]: Returned user ${user.username}`);
+    
     // This seems redundant? if the user is found they will have an ID?
-    // This can be removed once we know the response of findOne when there's no such user. 
+    // Can this be removed once we know the response of findOne when there's no such user. 
     const hasId = await repo.hasId(user);
 
     if (!hasId){
-      return res.status(404).send(`User ${user.username} does not exist`);
+      APILogger.logger.info(`[GET][/users]: failed to find user: ${username}`);
+      return res.status(404).send(`User ${username} does not exist`);
     }
     return res.status(200).send(user);
 
   } catch(error) {
+    APILogger.logger.info(`[GET][/users][ERROR]${error}`);
     return res.status(500).send(error);
   }
 }
@@ -49,10 +52,10 @@ export let addUser = async (req:Request, res:Response, next:NextFunction) => {
       password: req.body.password,
       user_company: req.body.user_company,
       user_type: req.body.user_type,
-      verified: req.body.verified,
-      account_creation: req.body.account_creation,
-      account_verified: req.body.account_verified,
-      latest_signin: req.body.latest_signin,
+      verified: false,
+      account_creation: new Date(),
+      account_verified: new Date(),
+      latest_signin: new Date(),
     }
     APILogger.logger.info(`[POST][/users]${user.username}`);
 

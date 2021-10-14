@@ -4,6 +4,7 @@ import 'reflect-metadata';
 import {APILogger} from './utils/logger'
 
 import { Test } from './entities/Test'
+import { User } from './entities/User'
 
 
 
@@ -18,7 +19,7 @@ export const config: ConnectionOptions = {
     logging: false,
 
     // Insert the entities
-    entities: [ Test ],
+    entities: [ Test, User ],
 
 }
 
