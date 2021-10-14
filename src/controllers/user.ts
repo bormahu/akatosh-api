@@ -18,16 +18,12 @@ export let getUser = async (req: Request, res:Response, next: NextFunction) => {
 
     // Search the database by username
     const user = await repo.findOne( { where: { username: username } } );
-    APILogger.logger.info(`[GET][/users]: Returned user ${user.username}`);
-    
-    // This seems redundant? if the user is found they will have an ID?
-    // Can this be removed once we know the response of findOne when there's no such user. 
-    const hasId = await repo.hasId(user);
 
-    if (!hasId){
+    if(user === undefined){
       APILogger.logger.info(`[GET][/users]: failed to find user: ${username}`);
       return res.status(404).send(`User ${username} does not exist`);
     }
+    APILogger.logger.info(`[GET][/users]: Returned user ${user}`);
     return res.status(200).send(user);
 
   } catch(error) {
@@ -77,13 +73,12 @@ export let updateUser = async (req:Request, res:Response, next: NextFunction) =>
 
     const username = req.body.username;
     const user = await repo.findOne({where: {user_name: username}});
-    APILogger.logger.info(`[PATCH][/users]${user}`);
 
-    const has_id = await repo.hasId(user);
-
-    if(!has_id){
-      return res.status(404).send("User does not exist");
+    if(user === undefined){
+      APILogger.logger.info(`[PATCH][/users]: failed to find user: ${username}`);
+      return res.status(404).send(`User ${username} does not exist`);
     }
+    APILogger.logger.info(`[PATCH][/users]${user}`);
     
     user.username = req.body.username || user.username;
     user.first_name = req.body.firstName || user.first_name;
@@ -110,12 +105,11 @@ export let removeUser = async (req:Request, res: Response, next: NextFunction) =
     const username = req.body.username;
     const user = await repo.findOne({where: {user_name: username}});
 
-    const has_id = await repo.hasId(user);
-
-    if (!has_id){
-      return res.status(404).send("User does not exist");
+    if(user === undefined){
+      APILogger.logger.info(`[DELETE][/users]: failed to find user: ${username}`);
+      return res.status(404).send(`User ${username} does not exist`);
     }
-
+    
     await repo.delete({username: username});
     APILogger.logger.info(`[DELETE][/users]${username}`);
 
