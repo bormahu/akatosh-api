@@ -9,12 +9,12 @@ export class User{
     user_id: String;
 
     @Column("varchar", {
-        name: "user_name", 
+        name: "username", 
         length: 50, 
         unique: true,
         nullable: false
     })
-    user_name: String;
+    username: String;
 
     @Column("varchar", {
         name: "first_name",

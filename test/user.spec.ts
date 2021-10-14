@@ -13,7 +13,7 @@ const expect = chai.expect
 const user: User = {
   // Generic values for testing
   user_id: '373737',
-  user_name: 'Neil',
+  username: 'Neil',
   first_name: 'Neil',
   last_name: 'Shevlin',
   email: 'neil@akatosh.io',
@@ -30,7 +30,7 @@ describe('userRoute', () =>{
   it('should respond with a status 404 because there is no user', async()=>{
     return chai
     .request(app)
-    .get(`/users/${user.user_name}`)
+    .get(`/users/${user.username}`)
     .then(res => {
       expect(res.status).to.be.equal(404)
     })
