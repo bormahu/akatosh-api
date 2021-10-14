@@ -1,5 +1,4 @@
 import * as dotenv from 'dotenv';
-import {APILogger} from './utils/logger'
 
 dotenv.config({
     path:'/Users/neilshevlin/Desktop/akatosh-api/.env'

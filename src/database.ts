@@ -3,8 +3,8 @@ import { db_host, db_port, db_name, db_user, db_password } from "./config";
 import 'reflect-metadata';
 import {APILogger} from './utils/logger'
 import { User } from './entities/User'
-
-
+import { Company } from './entities/Company'
+import { WatchedTenements } from './entities/WatchedTenements'
 
 export const config: ConnectionOptions = {
     type: 'postgres',
@@ -17,7 +17,7 @@ export const config: ConnectionOptions = {
     logging: false,
 
     // Insert the entities
-    entities: [ User ],
+    entities: [ User , Company, WatchedTenements],
 
 }
 

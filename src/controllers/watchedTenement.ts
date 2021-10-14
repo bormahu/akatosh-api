@@ -4,9 +4,9 @@ import {APILogger} from '../utils/logger';
 import { v4 as uuidv4 } from 'uuid';
 
 import { connect } from '../database';
-import { TenementRoute } from '../routes/tenement';
+import { WatchedTenementRoute } from '../routes/watchedTenement';
 
-export let getTenements = async (req:Request, res: Response, next:NextFunction)=> {
+export let getWatchedTenements = async (req:Request, res: Response, next:NextFunction)=> {
   try{
     const connection = await connect();
     const repo = connection.getRepository(WatchedTenements);
@@ -29,7 +29,7 @@ export let getTenements = async (req:Request, res: Response, next:NextFunction)=
   }
 }
 
-export let addTenement = async (req:Request, res: Response, next:NextFunction)=>{
+export let addWatchedTenement = async (req:Request, res: Response, next:NextFunction)=>{
   try{
     const connection = await connect();
     const repo = await connection.getRepository(WatchedTenements);
@@ -86,7 +86,7 @@ export let updateWatchedTenement = async (req:Request, res: Response, next:NextF
 }
 
 
-export let removeTenement = async (req:Request, res: Response, next:NextFunction)=> {
+export let removeWatchedTenement = async (req:Request, res: Response, next:NextFunction)=> {
 
   try{
     const connection = await connect();
