@@ -2,19 +2,20 @@ import { NextFunction, Request, Response } from 'express'
 import { WatchedTenements } from '../entities/WatchedTenements'
 import {APILogger} from '../utils/logger';
 import { v4 as uuidv4 } from 'uuid';
-
 import { connect } from '../database';
-import { WatchedTenementRoute } from '../routes/watchedTenement';
+import util from 'util';
 
 export let getWatchedTenements = async (req:Request, res: Response, next:NextFunction)=> {
   try{
     const connection = await connect();
-    const repo = connection.getRepository(WatchedTenements);
+    const repo = await connection.getRepository(WatchedTenements);
 
-    const owner_id = req.body.owner_id;
+
+    const owner_id = req.query.owner_id;
 
     // Have to grab the tenements with the correct parent owner
-    const tenements = repo.find({where: {onwer_id: owner_id}})
+    const tenements = await repo.find({where: {owner_id: owner_id}})
+    APILogger.logger.info(`[GET][/tenements]:${tenements}`);
 
     if(tenements === undefined){
       APILogger.logger.info(`[GET][/tenements]: failed to find any tenements with owner_id: ${owner_id}`);

@@ -5,7 +5,7 @@ export class WatchedTenementRoute{
     app.route('/tenement').post(tenementController.addWatchedTenement)
     app.route('/tenement/:tenementId').patch(tenementController.updateWatchedTenement)
     app.route('/tenement/:tenementId').delete(tenementController.removeWatchedTenement)
-    app.route('/tenement/:tenementId').get(tenementController.getWatchedTenements)
+    app.route('/tenement/').get(tenementController.getWatchedTenements)
 
   }
 }
