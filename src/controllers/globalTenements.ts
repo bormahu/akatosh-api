@@ -37,17 +37,16 @@ export let getTenement = async (req:Request, res: Response, next:NextFunction)=>
       // Should be provided with the tenmentId and the user_id
       const tenement: GlobalTenements = {
           tenement_id: uuidv4(),
-          licence: req.body.licence,
-          licence_special: req.body.licence_special,
-          survey_status: req.body.survey_status,
-          tenement_status: req.body.tenement_status,
+          licence: req.body.data.licence,
+          licence_special: req.body.data.licence_special,
+          survey_status: req.body.data.survey_status,
+          tenement_status: req.body.data.tenement_status,
           licence_start_date: new Date(),
           licence_end_date: new Date(),
           licence_grant_date: new Date(),
-          primary_tenement_holder: req.body.primary_tenement_holder,
-          tenement_area: req.body.tenement_area,
-        //   This will need some work
-          tenement_geometry: req.body.tenement_geometry
+          primary_tenement_holder: req.body.data.primary_tenement_holder,
+          tenement_area: req.body.data.tenement_area,
+          tenement_geometry: req.body.data.tenement_geometry
       }
       APILogger.logger.info(`[POST][/watched]${tenement.tenement_id}`);
   
