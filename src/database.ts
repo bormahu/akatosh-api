@@ -5,6 +5,7 @@ import {APILogger} from './utils/logger'
 import { User } from './entities/User'
 import { Company } from './entities/Company'
 import { WatchedTenements } from './entities/WatchedTenements'
+import { GlobalTenements } from './entities/GlobalTenements'
 
 export const config: ConnectionOptions = {
     type: 'postgres',
@@ -17,7 +18,7 @@ export const config: ConnectionOptions = {
     logging: false,
 
     // Insert the entities
-    entities: [ User , Company, WatchedTenements],
+    entities: [ User , Company, WatchedTenements, GlobalTenements],
 
 }
 
