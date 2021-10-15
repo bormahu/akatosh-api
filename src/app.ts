@@ -10,6 +10,7 @@ import { Index } from '../src/routes/index';
 import { CompanyRoute } from '../src/routes/company';
 import { UserRoute } from '../src/routes/user';
 import { WatchedTenementRoute } from './routes/watchedTenement';
+import { GlobalTenementRoute } from './routes/globalTenements';
 import {APILogger} from './utils/logger'
 
 import * as dotenv from 'dotenv';
@@ -24,6 +25,7 @@ class App {
   public companyRoutes:CompanyRoute = new CompanyRoute();
   public userRoutes:UserRoute = new UserRoute();
   public watchedTenementRoutes:WatchedTenementRoute = new WatchedTenementRoute();
+  public globalTenementRoutes: GlobalTenementRoute = new GlobalTenementRoute();
 
 
   constructor() {
@@ -34,6 +36,7 @@ class App {
     this.companyRoutes.routes(this.app);
     this.userRoutes.routes(this.app);
     this.watchedTenementRoutes.routes(this.app);
+    this.globalTenementRoutes.routes(this.app);
     this.app.use(morgan)
     this.app.use(
       expressWinston.errorLogger({
@@ -42,5 +45,4 @@ class App {
     );
    }
  }
-
 export default new App().app;
