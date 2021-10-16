@@ -2,10 +2,10 @@ import * as AOIController from '../controllers/areaOfInterest'
 
 export class AreaOfInterestRoute{
   public routes(app):void{
-    app.route('/watch').post(AOIController.addAreaOfInterest)
-    app.route('/watch/:watchId').patch(AOIController.updateAreaOfInterest)
-    app.route('/watch/:watchId').delete(AOIController.removeAreaOfInterest)
-    app.route('/watch').get(AOIController.getAreasOfInterest)
+    app.route('/aoi').post(AOIController.addAreaOfInterest)
+    app.route('/aoi').patch(AOIController.updateAreaOfInterest)
+    app.route('/aoi').delete(AOIController.removeAreaOfInterest)
+    app.route('/aoi').get(AOIController.getAreasOfInterest)
 
   }
 }
