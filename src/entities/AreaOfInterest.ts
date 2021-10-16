@@ -17,31 +17,31 @@ export class AreaOfInterest {
         nullable: true,
         default: () => `now()`,
     })
-    aoi_creation_date: Date;
+    creation_date: Date;
 
     @Column("timestamp with time zone", {
-        name: "watch_last_update",  
+        name: "last_update",  
         nullable: true,
         default: () => `now()`,
     })
-    aoi_last_update: Date;
+    last_update: Date;
 
     @Column("varchar", {
         name: "aoi_jurisdiction", 
         length: 120, 
         nullable: true,
     })
-    aoi_jurisdiction: String;
+    jurisdiction: String;
 
     @Column("decimal", {
         name: "aoi_area", 
         default: 0.0,
     })
-    aoi_area: Number;
+    area: Number;
 
     @Column("polygon", {
         name: "aoi_geometry",
         nullable: true,
     })
-    aoi_geometry: Object;
+    geometry: Object;
 }
