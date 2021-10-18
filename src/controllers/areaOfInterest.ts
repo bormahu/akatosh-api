@@ -61,8 +61,8 @@ export let getAreasOfInterest = async (req:Request, res: Response, next:NextFunc
       const connection = await connect();
       const repo = connection.getRepository(AreaOfInterest);
   
-      const aoi_id = req.body.aoi_id;
-      const owner_id = req.body.owner_id;
+      const aoi_id = req.body.data.aoi_id;
+      const owner_id = req.body.data.owner_id;
       const aoi =  await repo.findOne({where: {
         aoi_id: aoi_id,
         owner_id: owner_id
@@ -91,7 +91,7 @@ export let getAreasOfInterest = async (req:Request, res: Response, next:NextFunc
       const connection = await connect();
       const repo = connection.getRepository(AreaOfInterest);
   
-      const aoi_id = req.body.aoi_id;
+      const aoi_id = req.body.data.aoi_id;
   
       const aoi = await repo.findOne({where: {aoi_id: aoi_id}});
   

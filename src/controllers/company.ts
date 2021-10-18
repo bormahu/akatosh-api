@@ -11,7 +11,7 @@ export let getCompany = async (req: Request, res:Response, next: NextFunction) =
 
     const repo = await connection.getRepository(Company);
 
-    const company_name = req.body.company_name;
+    const company_name = req.query.company_name;
     APILogger.logger.info(`[GET][/company]${company_name}`);
 
     const company = await repo.findOne({where: {company_name: company_name}});

@@ -9,11 +9,9 @@ export let getUser = async (req: Request, res:Response, next: NextFunction) => {
   try{
     // Make the connection to the DB
     const connection = await connect();
-
-    // Get the repo connection
     const repo = connection.getRepository(User);
 
-    const username = req.params.username;
+    const username = req.query.username;
     APILogger.logger.info(`[GET][/users]${username}`);
 
     // Search the database by username
@@ -41,13 +39,13 @@ export let addUser = async (req:Request, res:Response, next:NextFunction) => {
     // Add in password encryption
     const user: User = {
       user_id: uuidv4(),
-      username: req.body.username,
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      email: req.body.email,
-      password: req.body.password,
-      user_company: req.body.user_company,
-      user_type: req.body.user_type,
+      username: req.body.data.data.username,
+      first_name: req.body.data.first_name,
+      last_name: req.body.data.last_name,
+      email: req.body.data.email,
+      password: req.body.data.password,
+      user_company: req.body.data.user_company,
+      user_type: req.body.data.user_type,
       verified: false,
       account_creation: new Date(),
       account_verified: new Date(),
@@ -80,13 +78,13 @@ export let updateUser = async (req:Request, res:Response, next: NextFunction) =>
     }
     APILogger.logger.info(`[PATCH][/users]${user}`);
     
-    user.username = req.body.username || user.username;
-    user.first_name = req.body.firstName || user.first_name;
-    user.last_name = req.body.firstname || user.last_name;
-    user.email = req.body.email || user.email;
-    user.password = req.body.password || user.password;
-    user.user_company = req.body.user_company || user.user_company;
-    user.user_type = req.body.user_type || user.user_type;
+    user.username = req.body.data.username || user.username;
+    user.first_name = req.body.data.firstName || user.first_name;
+    user.last_name = req.body.data.firstname || user.last_name;
+    user.email = req.body.data.email || user.email;
+    user.password = req.body.data.password || user.password;
+    user.user_company = req.body.data.user_company || user.user_company;
+    user.user_type = req.body.data.user_type || user.user_type;
 
     await repo.save(user);
 
@@ -102,7 +100,7 @@ export let removeUser = async (req:Request, res: Response, next: NextFunction) =
     const connection = await connect();
     const repo = await connection.getRepository(User);
 
-    const username = req.body.username;
+    const username = req.body.data.username;
     const user = await repo.findOne({where: {user_name: username}});
 
     if(user === undefined){

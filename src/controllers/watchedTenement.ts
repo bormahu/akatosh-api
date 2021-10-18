@@ -38,8 +38,8 @@ export let addWatchedTenement = async (req:Request, res: Response, next:NextFunc
     // Should be provided with the tenmentId and the user_id
     const watched_tenement: WatchedTenements = {
         watch_id: uuidv4(),
-        tenement_id: req.body.tenement_id,
-        owner_id: req.body.owner_id,
+        tenement_id: req.body.data.tenement_id,
+        owner_id: req.body.data.owner_id,
         watch_start_date: new Date(),
         watch_last_update: new Date(),
     }
@@ -61,8 +61,8 @@ export let updateWatchedTenement = async (req:Request, res: Response, next:NextF
     const connection = await connect();
     const repo = connection.getRepository(WatchedTenements);
 
-    const watch_id = req.body.watch_id;
-    const owner_id = req.body.owner_id
+    const watch_id = req.body.data.watch_id;
+    const owner_id = req.body.data.owner_id
     const watched_tenement =  await repo.findOne({where: {
       watch_id: watch_id,
       owner_id: owner_id
@@ -93,7 +93,7 @@ export let removeWatchedTenement = async (req:Request, res: Response, next:NextF
     const connection = await connect();
     const repo = connection.getRepository(WatchedTenements);
 
-    const watch_id = req.body.watch_id;
+    const watch_id = req.body.data.watch_id;
 
     const tenement = await repo.findOne({where: {watch_id: watch_id}});
 
