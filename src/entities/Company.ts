@@ -32,7 +32,7 @@ export class Company {
     // })
     // company_signup_user_id: String;
 
-    @Column("timestamp with time zone", {
+    @Column("timestamp", {
         name: "company_account_creation_date",
         default: () => `now()`,
         nullable: false,

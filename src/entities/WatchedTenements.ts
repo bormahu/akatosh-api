@@ -19,14 +19,14 @@ export class WatchedTenements {
     })
     owner_id: String;
 
-    @Column("timestamp with time zone", {
+    @Column("timestamp", {
         name: "watch_start_date",  
         nullable: true,
         default: () => `now()`,
     })
     watch_start_date: Date;
 
-    @Column("timestamp with time zone", {
+    @Column("timestamp", {
         name: "watch_last_update",  
         nullable: true,
         default: () => `now()`,

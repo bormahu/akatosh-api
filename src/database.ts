@@ -10,7 +10,7 @@ import { AreaOfInterest } from './entities/AreaOfInterest'
 
 
 export const config: ConnectionOptions = {
-    type: 'postgres',
+    type: 'mysql',
     host: db_host,
     port: db_port,
     username: db_user, 

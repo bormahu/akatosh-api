@@ -65,21 +65,21 @@ export class User{
     })
     verified: Boolean;
 
-    @Column("timestamp with time zone", {
+    @Column("timestamp", {
         name: "account_creation",
         default: () => `now()`,
         nullable: false,
     })
     account_creation: Date;
 
-    @Column("timestamp with time zone", {
+    @Column("timestamp", {
         name: "account_verified",
         default: () => `now()`,
         nullable: false,
     })
     account_verified: Date;
 
-    @Column("timestamp with time zone", {
+    @Column("timestamp", {
         name: "latest_signin",
         default: () => `now()`,
         nullable: false,
