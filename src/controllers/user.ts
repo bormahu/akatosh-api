@@ -1,60 +1,120 @@
-import { NextFunction, Request, Response } from 'express'
-import {default as User} from '../model/User'
+import { NextFunction, Request, Response } from 'express';
+import { User } from '../entities/User';
+import {APILogger} from '../utils/logger';
+import { v4 as uuidv4 } from 'uuid';
 
-let users: Array<User> = []
+import { connect } from '../database';
 
-export let getUser = (req: Request, res:Response, next: NextFunction) => {
-  const username = req.params.username
-  const user = users.find(obj => obj.username === username)
-  const httpStatusCode = user ? 200 : 404
+export let getUser = async (req: Request, res:Response, next: NextFunction) => {
+  try{
+    // Make the connection to the DB
+    const connection = await connect();
+    const repo = connection.getRepository(User);
 
-  return res.status(httpStatusCode).send(user)
+    const username = req.query.username;
+    APILogger.logger.info(`[GET][/users]${username}`);
+
+    // Search the database by username
+    const user = await repo.findOne( { where: { username: username } } );
+
+    if(user === undefined){
+      APILogger.logger.info(`[GET][/users]: failed to find user: ${username}`);
+      return res.status(404).send(`User ${username} does not exist`);
+    }
+    APILogger.logger.info(`[GET][/users]: Returned user ${user}`);
+    return res.status(200).send(user);
+
+  } catch(error) {
+    APILogger.logger.info(`[GET][/users][ERROR]${error}`);
+    return res.status(500).send(error);
+  }
 }
 
-export let addUser = (req:Request, res:Response, next:NextFunction) => {
-  const user:User = {
-    id: Math.floor(Math.random()*100)+1,
-    username: req.body.username,
-    firstName: req.body.firstName,
-    secondName: req.body.secondName,
-    email: req.body.email,
-    password: req.body.password,
-    userCompany: req.body.userCompany,
-    userType: req.body.userType
+export let addUser = async (req:Request, res:Response, next:NextFunction) => {
+  try{
+    const connection = await connect();
+
+    const repo = connection.getRepository(User);
+
+    // Add in password encryption
+    const user: User = {
+      user_id: uuidv4(),
+      username: req.body.data.data.username,
+      first_name: req.body.data.first_name,
+      last_name: req.body.data.last_name,
+      email: req.body.data.email,
+      password: req.body.data.password,
+      user_company: req.body.data.user_company,
+      user_type: req.body.data.user_type,
+      verified: false,
+      account_creation: new Date(),
+      account_verified: new Date(),
+      latest_signin: new Date(),
+    }
+    APILogger.logger.info(`[POST][/users]${user.username}`);
+
+    // Add the user to the DB
+    await repo.save(user);
+
+    return res.status(201).send(user);
+
+  } catch(error) {
+    APILogger.logger.info(`[POST][/users][ERROR]${error}`);
+    return res.status(500).send(error);
   }
-  users.push(user)
-  return res.status(201).send(user)
 }
 
-export let updateUser = (req:Request, res:Response, next: NextFunction) => {
-  const username = req.body.username
-  const userIndex = users.findIndex(item => item.username === username)
+export let updateUser = async (req:Request, res:Response, next: NextFunction) => {
+  try{
+    const connection = await connect();
+    const repo = connection.getRepository(User);
 
-  if(userIndex === -1){
-    return res.status(404).send()
+    const username = req.body.username;
+    const user = await repo.findOne({where: {user_name: username}});
+
+    if(user === undefined){
+      APILogger.logger.info(`[PATCH][/users]: failed to find user: ${username}`);
+      return res.status(404).send(`User ${username} does not exist`);
+    }
+    APILogger.logger.info(`[PATCH][/users]${user}`);
+    
+    user.username = req.body.data.username || user.username;
+    user.first_name = req.body.data.firstName || user.first_name;
+    user.last_name = req.body.data.firstname || user.last_name;
+    user.email = req.body.data.email || user.email;
+    user.password = req.body.data.password || user.password;
+    user.user_company = req.body.data.user_company || user.user_company;
+    user.user_type = req.body.data.user_type || user.user_type;
+
+    await repo.save(user);
+
+    return res.status(204).send();
+
+  } catch(error) {
+    APILogger.logger.info(`[PATCH][/users][ERROR]${error}`);
+    return res.status(500).send(error);
   }
-  const user = users[userIndex]
-  user.username = req.body.username || user.username
-  user.firstName = req.body.firstName || user.firstName
-  user.secondName = req.body.firstname || user.secondName
-  user.email = req.body.email || user.email
-  user.password = req.body.password || user.password
-  user.userCompany = req.body.userCompany || user.userCompany
-  user.userType = req.body.userType|| user.userType
-
-  users[userIndex] = user
-
-  return res.status(204).send()
 }
+export let removeUser = async (req:Request, res: Response, next: NextFunction) => {
+  try{
+    const connection = await connect();
+    const repo = await connection.getRepository(User);
 
-export let removeUser = (req:Request, res: Response, next: NextFunction) => {
-  const username = req.body.username
-  const userIndex  = users.findIndex(item => item.username === username)
+    const username = req.body.data.username;
+    const user = await repo.findOne({where: {user_name: username}});
 
-  if(userIndex === -1){
-    return res.status(404).send()
+    if(user === undefined){
+      APILogger.logger.info(`[DELETE][/users]: failed to find user: ${username}`);
+      return res.status(404).send(`User ${username} does not exist`);
+    }
+
+    await repo.delete({username: username});
+    APILogger.logger.info(`[DELETE][/users]${username}`);
+
+    return res.status(204).send(`User ${username} has been deleted`);
+
+  } catch(error) {
+    APILogger.logger.info(`[DELETE][/users][ERROR]${error}`);
+    return res.status(500).send(error);
   }
-  users = users.filter(item => item.username !== username)
-
-  return res.status(204).send()
 }
