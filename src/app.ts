@@ -39,7 +39,7 @@ class App {
     this.watchedTenementRoutes.routes(this.app);
     this.globalTenementRoutes.routes(this.app);
     this.areaOfInterestRoutes.routes(this.app);
-    this.app.use(morgan)
+    // this.app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
     this.app.use(
       expressWinston.errorLogger({
         transports: [new winston.transports.Console()],

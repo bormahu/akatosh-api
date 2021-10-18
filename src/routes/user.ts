@@ -5,6 +5,6 @@ export class UserRoute {
     app.route('/users').post(userController.addUser)
     app.route('/users').patch(userController.updateUser)
     app.route('/users').delete(userController.removeUser)
-    app.route('/users').get(userController.getUser)
+    app.route('/users/').get(userController.getUser)
   }
 }

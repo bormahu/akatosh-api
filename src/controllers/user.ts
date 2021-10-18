@@ -7,10 +7,11 @@ import { connect } from '../database';
 
 export let getUser = async (req: Request, res:Response, next: NextFunction) => {
   try{
+    
     // Make the connection to the DB
     const connection = await connect();
     const repo = connection.getRepository(User);
-
+    
     const username = req.query.username;
     APILogger.logger.info(`[GET][/users]${username}`);
 
@@ -39,7 +40,7 @@ export let addUser = async (req:Request, res:Response, next:NextFunction) => {
     // Add in password encryption
     const user: User = {
       user_id: uuidv4(),
-      username: req.body.data.data.username,
+      username: req.body.data.username,
       first_name: req.body.data.first_name,
       last_name: req.body.data.last_name,
       email: req.body.data.email,
