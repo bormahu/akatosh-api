@@ -35,19 +35,19 @@ export class GlobalTenements {
     })
     tenement_status: String;
 
-    @Column("timestamp", {
-        name: "licnece_start_date",  
+    @Column("datetime", {
+        name: "licence_start_date",  
         nullable: true,
     })
     licence_start_date: Date;
 
-    @Column("timestamp", {
+    @Column("datetime", {
         name: "licence_end_date",  
         nullable: true,
     })
     licence_end_date: Date;
 
-    @Column("timestamp", {
+    @Column("datetime", {
         name: "licence_grant_date",  
         nullable: true,
     })
@@ -67,7 +67,7 @@ export class GlobalTenements {
     tenement_area: Number;
 
     // geometry column may have to be adjusted to allow for correct support for geometries. 
-    @Column("polygon", {
+    @Column("multipolygon", {
         name: "tenement_geometry",
         nullable: true,
     })

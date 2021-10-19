@@ -18,6 +18,8 @@ export const config: ConnectionOptions = {
     database: db_name,
     synchronize: true,
     logging: false,
+    // When legacy support is set to true(it's default) geometry selects will use the AsText function, which is deprecated in MySql 8
+    legacySpatialSupport: false,
 
     // Insert the entities
     entities: [ User , Company, WatchedTenements, GlobalTenements, AreaOfInterest],

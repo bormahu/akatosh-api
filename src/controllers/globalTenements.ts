@@ -11,17 +11,16 @@ export let getTenement = async (req:Request, res: Response, next:NextFunction)=>
         const repo = await connection.getRepository(GlobalTenements);
   
         const tenement_id = req.query.tenement_id
-  
         // Have to grab the tenements with the correct parent owner
-        const tenements = await repo.findOne({where: {tenement_id: tenement_id}})
-        APILogger.logger.info(`[GET][/globaltenements]:${tenements}`);
+        const tenement = await repo.findOne({where: {tenement_id: tenement_id}})
+        APILogger.logger.info(`[GET][/globaltenements]:${tenement_id}`);
     
-        if(tenements === undefined){
+        if(tenement === undefined){
             APILogger.logger.info(`[GET][/globaltenements]: failed to find any tenements with owner_id: ${tenement_id}`);
-            return res.status(404).send(`No watched tenements with owner_id ${tenement_id}`)
+            return res.status(404).send(`No watched tenements with tenement_id ${tenement_id}`)
         }
         APILogger.logger.info(`[GET][/globaltenements]: Returned tenements to ${tenement_id}`);
-        return res.status(200).send(tenements);
+        return res.status(200).send(tenement);
   
     }catch(error){
       APILogger.logger.info(`[GET][/globaltenements][ERROR]${error}`);

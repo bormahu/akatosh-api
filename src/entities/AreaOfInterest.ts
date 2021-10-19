@@ -39,9 +39,9 @@ export class AreaOfInterest {
     })
     area: Number;
 
-    @Column("polygon", {
+    @Column("geometrycollection", {
         name: "aoi_geometry",
         nullable: true,
     })
-    geometry: Object;
+    geometry: String;
 }
