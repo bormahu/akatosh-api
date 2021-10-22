@@ -7,12 +7,12 @@ export class APILogger{
     })
     
     public static logger = createLogger({
-        level:'info',
         format: combine(
             label({label:'api errors'}),
             timestamp(),
             APILogger.myFormat
         ),
+        level:'info',
         transports:[
             new transports.File({filename:'aggregated.log'}),
             new transports.Console()

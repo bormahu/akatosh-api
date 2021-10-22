@@ -1,4 +1,4 @@
-import * as AOIController from '../controllers/areaOfInterest'
+import * as AOIController from '../controllers/areaOfInterest';
 
 export class AreaOfInterestRoute{
   public routes(app):void{

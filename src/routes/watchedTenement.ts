@@ -1,4 +1,4 @@
-import * as tenementController from '../controllers/watchedTenement'
+import * as tenementController from '../controllers/watchedTenement';
 
 export class WatchedTenementRoute{
   public routes(app):void{

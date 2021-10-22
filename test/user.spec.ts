@@ -1,10 +1,13 @@
 'use strict'
 
 import * as chai from 'chai'
-import chaiHttp = require('chai-http')
+
 import 'mocha'
+
 import app from '../src/app'
 import  { User } from '../src/entities/User'
+
+import chaiHttp = require('chai-http')
 
 chai.use(chaiHttp)
 
@@ -12,18 +15,18 @@ const expect = chai.expect
 
 const user: User = {
   // Generic values for testing
-  user_id: '373737',
-  username: 'Neil',
-  first_name: 'Neil',
-  last_name: 'Shevlin',
+  accountCreation: new Date('1998-02-12T03:24:00'),
+  accountVerified: new Date('1998-02-12T03:24:00'),
   email: 'neil@akatosh.io',
+  firstName: 'Neil',
+  lastName: 'Shevlin',
+  latestSignin: new Date('1998-02-12T03:24:00'),
   password: 'password',
-  user_company: 'akatosh',
-  user_type: 'type',
+  userCompany: 'akatosh',
+  userId: '1',
+  userType: 'type',
+  username: 'Neil',
   verified: true,
-  account_creation: new Date('1998-02-12T03:24:00'),
-  account_verified: new Date('1998-02-12T03:24:00'),
-  latest_signin: new Date('1998-02-12T03:24:00'),
 }
 
 describe('userRoute', () =>{
@@ -35,4 +38,25 @@ describe('userRoute', () =>{
       expect(res.status).to.be.equal(404)
     })
   })
+  it('should create a new user and retrieve it back', async()=>{
+    return chai
+    .request(app)
+    .post(`/users`)
+    .send(user)
+    .then(res => {
+      expect(res.status).to.be.equal(201)
+      expect(res.body.userId).to.be.equal(user.userId)
+      user.userId = res.body.userId
+    })
+  })
+  it('should return the order created in the previous post', async()=>{
+    return chai
+    .request(app)
+    .get(`/users/userId?${user.userId}`)
+    .then(res => {
+      expect(res.status).to.be.equal(200)
+      expect(res.body.id).to.be.equal(user.userId)
+    })
+  })
 })
+

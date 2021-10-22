@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
-import { User } from '../entities/User';
-import {APILogger} from '../utils/logger';
 import { v4 as uuidv4 } from 'uuid';
 
 import { connect } from '../database';
+import { User } from '../entities/User';
+import {APILogger} from '../utils/logger';
 
 export let getUser = async (req: Request, res:Response, next: NextFunction) => {
   try{
@@ -39,18 +39,18 @@ export let addUser = async (req:Request, res:Response, next:NextFunction) => {
 
     // Add in password encryption
     const user: User = {
-      user_id: uuidv4(),
-      username: req.body.data.username,
-      first_name: req.body.data.first_name,
-      last_name: req.body.data.last_name,
+      accountCreation: new Date(),
+      accountVerified: new Date(),
       email: req.body.data.email,
+      firstName: req.body.data.firstName,
+      lastName: req.body.data.lastName,
+      latestSignin: new Date(),
       password: req.body.data.password,
-      user_company: req.body.data.user_company,
-      user_type: req.body.data.user_type,
+      userCompany: req.body.data.userCompany,
+      userId: uuidv4(),
+      userType: req.body.data.user_type,
+      username: req.body.data.username,
       verified: false,
-      account_creation: new Date(),
-      account_verified: new Date(),
-      latest_signin: new Date(),
     }
     APILogger.logger.info(`[POST][/users]${user.username}`);
 
@@ -71,7 +71,7 @@ export let updateUser = async (req:Request, res:Response, next: NextFunction) =>
     const repo = connection.getRepository(User);
 
     const username = req.body.username;
-    const user = await repo.findOne({where: {user_name: username}});
+    const user = await repo.findOne({where: {username: username}});
 
     if(user === undefined){
       APILogger.logger.info(`[PATCH][/users]: failed to find user: ${username}`);
@@ -80,12 +80,12 @@ export let updateUser = async (req:Request, res:Response, next: NextFunction) =>
     APILogger.logger.info(`[PATCH][/users]${user}`);
     
     user.username = req.body.data.username || user.username;
-    user.first_name = req.body.data.firstName || user.first_name;
-    user.last_name = req.body.data.firstname || user.last_name;
+    user.firstName = req.body.data.firstName || user.firstName;
+    user.lastName = req.body.data.firstname || user.lastName;
     user.email = req.body.data.email || user.email;
     user.password = req.body.data.password || user.password;
-    user.user_company = req.body.data.user_company || user.user_company;
-    user.user_type = req.body.data.user_type || user.user_type;
+    user.userCompany = req.body.data.user_company || user.userCompany;
+    user.userType = req.body.data.user_type || user.userType;
 
     await repo.save(user);
 

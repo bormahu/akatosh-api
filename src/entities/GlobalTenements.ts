@@ -1,75 +1,80 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
-import { Length } from 'class-validator'
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+
+import { Length } from 'class-validator';
+import { WatchedTenements } from './WatchedTenements';
 
 @Entity("GlobalTenements")
 export class GlobalTenements {
 
     @PrimaryGeneratedColumn("uuid")
-    tenement_id: String;
+    public tenementId: String;
 
     @Column("varchar", {
-        name: "licence", 
         length: 120, 
+        name: "licence", 
         nullable: false
     })
-    licence: String;
+    public licence: String;
 
     @Column("varchar", {
-        name: "licence_special", 
         length: 120, 
+        name: "licence_special", 
         nullable: true,
     })
-    licence_special: String;
+    public licenceSpecial: String;
 
     @Column("varchar", {
+        length: 120, 
         name: "survey_status", 
-        length: 120, 
         nullable: false,
     })
-    survey_status: String;
+    public surveyStatus: String;
 
     @Column("varchar", {
-        name: "tenement_status", 
         length: 120, 
+        name: "tenement_status", 
         nullable: false,
     })
-    tenement_status: String;
+    public tenementStatus: String;
 
     @Column("datetime", {
         name: "licence_start_date",  
         nullable: true,
     })
-    licence_start_date: Date;
+    public licenceStartDate: Date;
 
     @Column("datetime", {
         name: "licence_end_date",  
         nullable: true,
     })
-    licence_end_date: Date;
+    public licenceEndDate: Date;
 
     @Column("datetime", {
         name: "licence_grant_date",  
         nullable: true,
     })
-    licence_grant_date: Date;
+    public licenceGrantDate: Date;
 
     @Column("varchar", {
-        name: "primary_tenement_holder", 
         length: 120, 
+        name: "primary_tenement_holder", 
         nullable: true,
     })
-    primary_tenement_holder: String;
+    public primaryTenementHolder: String;
 
     @Column("decimal", {
-        name: "tenement_area", 
         default: 0.0,
+        name: "tenement_area", 
     })
-    tenement_area: Number;
+    public tenementArea: Number;
 
     // geometry column may have to be adjusted to allow for correct support for geometries. 
-    @Column("multipolygon", {
+    @Column("geometry", {
         name: "tenement_geometry",
         nullable: true,
     })
-    tenement_geometry: Object;
+    public tenementGeometry: String;
+
+    @OneToMany(()=> WatchedTenements, watchedTenement => watchedTenement.tenement)
+    public watchedTenements: Array<WatchedTenements>;
 }

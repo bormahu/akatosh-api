@@ -1,25 +1,25 @@
-import { NextFunction, Request, Response } from 'express'
-import { GlobalTenements } from '../entities/GlobalTenements'
-import {APILogger} from '../utils/logger';
+import { NextFunction, Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
+
 import { connect } from '../database';
-import util from 'util';
+import { GlobalTenements } from '../entities/GlobalTenements';
+import {APILogger} from '../utils/logger';
 
 export let getTenement = async (req:Request, res: Response, next:NextFunction)=> {
     try{
         const connection = await connect();
         const repo = await connection.getRepository(GlobalTenements);
   
-        const tenement_id = req.query.tenement_id
+        const tenementId = req.query.tenementId
         // Have to grab the tenements with the correct parent owner
-        const tenement = await repo.findOne({where: {tenement_id: tenement_id}})
-        APILogger.logger.info(`[GET][/globaltenements]:${tenement_id}`);
+        const tenement = await repo.findOne({where: {tenementId: tenementId}})
+        APILogger.logger.info(`[GET][/globaltenements]:${tenementId}`);
     
         if(tenement === undefined){
-            APILogger.logger.info(`[GET][/globaltenements]: failed to find any tenements with owner_id: ${tenement_id}`);
-            return res.status(404).send(`No watched tenements with tenement_id ${tenement_id}`)
+            APILogger.logger.info(`[GET][/globaltenements]: failed to find any tenements with owner_id: ${tenementId}`);
+            return res.status(404).send(`No watched tenements with tenementId ${tenementId}`)
         }
-        APILogger.logger.info(`[GET][/globaltenements]: Returned tenements to ${tenement_id}`);
+        APILogger.logger.info(`[GET][/globaltenements]: Returned tenements to ${tenementId}`);
         return res.status(200).send(tenement);
   
     }catch(error){
@@ -35,19 +35,20 @@ export let getTenement = async (req:Request, res: Response, next:NextFunction)=>
   
       // Should be provided with the tenmentId and the user_id
       const tenement: GlobalTenements = {
-          tenement_id: uuidv4(),
           licence: req.body.data.licence,
-          licence_special: req.body.data.licence_special,
-          survey_status: req.body.data.survey_status,
-          tenement_status: req.body.data.tenement_status,
-          licence_start_date: new Date(),
-          licence_end_date: new Date(),
-          licence_grant_date: new Date(),
-          primary_tenement_holder: req.body.data.primary_tenement_holder,
-          tenement_area: req.body.data.tenement_area,
-          tenement_geometry: req.body.data.tenement_geometry
+          licenceEndDate: new Date(),
+          licenceGrantDate: new Date(),
+          licenceSpecial: req.body.data.licenceSpecial,
+          licenceStartDate: new Date(),
+          primaryTenementHolder: req.body.data.primaryTenementHolder,
+          surveyStatus: req.body.data.surveyStatus,
+          tenementArea: req.body.data.tenementArea,
+          tenementGeometry: req.body.data.tenementGeometry,
+          tenementId: uuidv4(),
+          tenementStatus: req.body.data.tenementStatus,
+          watchedTenements: []
       }
-      APILogger.logger.info(`[POST][/watched]${tenement.tenement_id}`);
+      APILogger.logger.info(`[POST][/watched]${tenement.tenementId}`);
   
       await repo.save(tenement);
   

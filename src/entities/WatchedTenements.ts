@@ -1,35 +1,33 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
-import { Length } from 'class-validator'
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+
+import { GlobalTenements } from './GlobalTenements';
 
 @Entity("WatchedTenements")
 export class WatchedTenements {
 
     @PrimaryGeneratedColumn("uuid")
-    watch_id: String;
-
-    @Column("uuid", {
-        name: "tenement_id",
-        nullable: false
-    })
-    tenement_id: String;
+    public watchId: String;
 
     @Column("uuid", {
         name: "owner_id",
         nullable: false
     })
-    owner_id: String;
+    public ownerId: String;
 
     @Column("timestamp", {
+        default: () => `now()`,
         name: "watch_start_date",  
         nullable: true,
-        default: () => `now()`,
     })
-    watch_start_date: Date;
+    public watchStartDate: Date;
 
     @Column("timestamp", {
+        default: () => `now()`,
         name: "watch_last_update",  
         nullable: true,
-        default: () => `now()`,
     })
-    watch_last_update: Date;
+    public watchLastUpdate: Date;
+
+    @ManyToOne(()=> GlobalTenements, tenement => tenement.tenementId)
+    public tenement: GlobalTenements;
 }

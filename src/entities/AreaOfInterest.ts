@@ -1,47 +1,47 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
+import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm'
 
 @Entity("AreaOfInterest")
 export class AreaOfInterest {
 
     @PrimaryGeneratedColumn("uuid")
-    aoi_id: String;
+    public aoiId: String;
 
     @Column("uuid", {
         name: "owner_id",
         nullable: false
     })
-    owner_id: String;
+    public ownerId: String;
 
     @Column("timestamp", {
+        default: () => `now()`,
         name: "watch_start_date",  
         nullable: true,
-        default: () => `now()`,
     })
-    creation_date: Date;
+    public creationDate: Date;
 
     @Column("timestamp", {
+        default: () => `now()`,
         name: "last_update",  
         nullable: true,
-        default: () => `now()`,
     })
-    last_update: Date;
+    public lastUpdate: Date;
 
     @Column("varchar", {
-        name: "aoi_jurisdiction", 
         length: 120, 
+        name: "aoi_jurisdiction", 
         nullable: true,
     })
-    jurisdiction: String;
+    public jurisdiction: String;
 
     @Column("decimal", {
-        name: "aoi_area", 
         default: 0.0,
+        name: "aoi_area", 
     })
-    area: Number;
+    public area: Number;
 
-    @Column("geometrycollection", {
+    @Column("geometry", {
         name: "aoi_geometry",
         nullable: true,
     })
-    geometry: String;
+    public geometry: String;
 }

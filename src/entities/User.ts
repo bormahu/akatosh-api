@@ -1,88 +1,90 @@
 'use strict'
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
-import { Length } from 'class-validator'
+
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+import { Length } from 'class-validator';
 
 @Entity("User")
 export class User{
 
     @PrimaryGeneratedColumn("uuid")
-    user_id: String;
+    public userId: String;
 
     @Column("varchar", {
-        name: "username", 
         length: 50, 
+        name: "username", 
+        nullable: false,
         unique: true,
-        nullable: false
     })
-    username: String;
+    public username: String;
 
     @Column("varchar", {
+        length: 50,
         name: "first_name",
-        length: 50,
         nullable: false,
     })
-    first_name: String;
+    public firstName: String;
 
     @Column("varchar", {
+        length: 50,
         name: "last_name",
-        length: 50,
         nullable: false,
     })
-    last_name: String;
+    public lastName: String;
 
     @Column("varchar", {
-        name: "email",
         length: 100,
-        unique: true,
+        name: "email",
         nullable: false,
+        unique: true,
     })
-    email: String;
+    public email: String;
 
     @Column("varchar", {
-        name: "password",
         length: 100, 
+        name: "password",
         nullable: false
     })
     @Length(8, 100)
-    password: String
+    public password: String
 
     @Column("varchar", {
+        length: 60,
         name: "user_company",
-        length: 60,
     })
-    user_company: String;
+    public userCompany: String;
 
     @Column("varchar", {
-        name: "user_type",
         length: 60,
+        name: "user_type",
     })
-    user_type: String;
+    public userType: String;
 
     @Column("boolean", {
-        name: "verified", 
         default: false, 
+        name: "verified", 
         nullable: false,
     })
-    verified: Boolean;
+    public verified: Boolean;
 
     @Column("timestamp", {
+        default: () => `now()`,
         name: "account_creation",
-        default: () => `now()`,
         nullable: false,
     })
-    account_creation: Date;
+    public accountCreation: Date;
 
     @Column("timestamp", {
+        default: () => `now()`,
         name: "account_verified",
-        default: () => `now()`,
         nullable: false,
     })
-    account_verified: Date;
+    public accountVerified: Date;
 
     @Column("timestamp", {
-        name: "latest_signin",
         default: () => `now()`,
+        name: "latest_signin",
         nullable: false,
     })
-    latest_signin: Date;
+    public latestSignin: Date;
 }

@@ -1,7 +1,7 @@
-import { Request, Response } from 'express'
-import * as cors from 'cors'
-
+import * as cors from 'cors';
 import * as dotenv from 'dotenv';
+
+import { Request, Response } from 'express';
 
 dotenv.config({
     path:'/Users/neilshevlin/Desktop/akatosh-api/.env'

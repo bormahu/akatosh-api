@@ -13,7 +13,7 @@
     "test:mutation": "stryker run",
     "stryker:init": "stryker init",
     "mondev": "nodemon dev",
-    "dev": "cross-env PORT=3000 NODE_ENV=dev ts-node ./src/server.ts",
+    "dev": "nodemon",
     "prod": "PORT=3000 npm run build && npm run start",
     "tsc": "tsc",
     "test-DB-connection": "ts-node ./src/database.ts"
@@ -43,7 +43,7 @@
     "chai": "^4.2.0",
     "cross-env": "^5.2.0",
     "mocha": "^5.2.0",
-    "nodemon": "^2.0.12",
+    "nodemon": "^2.0.14",
     "rimraf": "^2.6.2",
     "stryker": "^0.33.1",
     "stryker-api": "^0.22.0",

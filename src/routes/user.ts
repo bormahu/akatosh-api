@@ -1,4 +1,4 @@
-import * as userController from '../controllers/user'
+import * as userController from '../controllers/user';
 
 export class UserRoute {
   public routes(app):void{

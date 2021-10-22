@@ -1,4 +1,4 @@
-import * as companyController from '../controllers/company'
+import * as companyController from '../controllers/company';
 
 export class CompanyRoute{
   public routes(app):void{

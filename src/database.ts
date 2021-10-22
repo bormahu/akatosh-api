@@ -1,13 +1,14 @@
-import { ConnectionOptions, Connection, createConnection, getConnection, createConnections } from 'typeorm';
-import { db_host, db_port, db_name, db_user, db_password } from "./config";
 import 'reflect-metadata';
-import {APILogger} from './utils/logger'
-import { User } from './entities/User'
-import { Company } from './entities/Company'
-import { WatchedTenements } from './entities/WatchedTenements'
-import { GlobalTenements } from './entities/GlobalTenements'
-import { AreaOfInterest } from './entities/AreaOfInterest'
 
+import { Connection, ConnectionOptions, createConnection, createConnections, getConnection } from 'typeorm';
+import { db_host, db_name, db_password, db_port, db_user } from "./config";
+
+import {APILogger} from './utils/logger';
+import { AreaOfInterest } from './entities/AreaOfInterest';
+import { Company } from './entities/Company';
+import { GlobalTenements } from './entities/GlobalTenements';
+import { User } from './entities/User';
+import { WatchedTenements } from './entities/WatchedTenements';
 
 export const config: ConnectionOptions = {
     type: 'mysql',

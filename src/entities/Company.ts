@@ -1,48 +1,40 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity("Company")
 export class Company {
 
     @PrimaryGeneratedColumn("uuid")
-    company_id: String;
+    public companyId: String;
 
     @Column("varchar", {
-        name: "company_name", 
         length: 100, 
+        name: "company_name", 
     })
-    company_name: String;
+    public companyName: String;
 
     @Column("varchar", {
+        length: 100,
         name: "company_size", 
-        length: 100 
     })
-    company_size: String;
+    public companySize: String;
 
     @Column("varchar", {
+        length: 100,
         name: "company_location", 
-        length: 100 
     })
-    company_location: String;
-
-    // @Column("varchar", {
-    //     name: "company_signup_user_id", 
-    //     length: 100,
-    //     nullable: false,
-    //     unique: true,
-    // })
-    // company_signup_user_id: String;
+    public companyLocation: String;
 
     @Column("timestamp", {
-        name: "company_account_creation_date",
         default: () => `now()`,
+        name: "company_account_creation_date",
         nullable: false,
     })
-    company_account_creation_date: Date;
+    public companyAccountCreationDate: Date;
 
     @Column("integer",{
-        name: "active_user_accounts",
         default: 1,
+        name: "active_user_accounts",
         nullable: false
     })
-    active_user_accounts: Number;
+    public activeUserAccounts: Number;
 }

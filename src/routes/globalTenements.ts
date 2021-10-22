@@ -1,4 +1,4 @@
-import * as globalTenementController from '../controllers/globalTenements'
+import * as globalTenementController from '../controllers/globalTenements';
 
 export class GlobalTenementRoute{
   public routes(app):void{

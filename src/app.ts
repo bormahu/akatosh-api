@@ -1,19 +1,21 @@
-import * as morgan from 'morgan'
+import "reflect-metadata";
+
 import * as bodyParser from 'body-parser';
+import * as dotenv from 'dotenv';
 import * as express from 'express';
 import * as expressWinston from 'express-winston';
+import * as morgan from 'morgan';
 import * as winston from 'winston';
-import "reflect-metadata";
+
+import {APILogger} from './utils/logger';
 import { APIRoute } from '../src/routes/api';
-import { Index } from '../src/routes/index';
+import { AreaOfInterestRoute } from './routes/areaOfInterest';
 import { CompanyRoute } from '../src/routes/company';
+import { GlobalTenementRoute } from './routes/globalTenements';
+import { Index } from '../src/routes/index';
 import { UserRoute } from '../src/routes/user';
 import { WatchedTenementRoute } from './routes/watchedTenement';
-import { GlobalTenementRoute } from './routes/globalTenements';
-import { AreaOfInterestRoute } from './routes/areaOfInterest';
-import {APILogger} from './utils/logger'
 
-import * as dotenv from 'dotenv';
 dotenv.config({
   path:'/Users/neilshevlin/Desktop/akatosh-api/.env'
 })
