@@ -5,6 +5,6 @@ export class CompanyRoute{
     app.route('/companies').post(companyController.addCompany)
     app.route('/companies').patch(companyController.updateCompany)
     app.route('/companies').delete(companyController.removeCompany)
-    app.route('/companies').get(companyController.getCompany)
+    app.route('/companies/').get(companyController.getCompany)
   }
 }
