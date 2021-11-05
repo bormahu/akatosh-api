@@ -10,9 +10,9 @@ export class PassportConfig {
         passport.use(
             new Strategy(
                 {   
-                    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
                     // Secret should be more complex and stored in a vault outside of dev
                     secretOrKey: secret,
+                    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
                 },
                 async(token, done) => {
                     try{

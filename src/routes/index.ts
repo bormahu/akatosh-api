@@ -8,7 +8,7 @@ dotenv.config({
 })
 
 const corsOptions = {
-  origin: process.env.CLIENT_URL
+  origin: true 
 }
 
 export class Index {
