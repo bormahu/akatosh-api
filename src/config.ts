@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv';
 
 dotenv.config({
     // SET YOUR LOCAL PATH TO YOUR ENV FILE
-    path:'PATH'
+    path:'/Users/neilshevlin/Desktop/Akatosh/api/.env'
 })
 // port config
 // export const port = Number(process.env.API_PORT);
