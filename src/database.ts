@@ -43,6 +43,6 @@ export const connect = async() => {
         catch (error){
             APILogger.logger.info(`[ TYPEORM ]: An error has occured in connecting to the Database. `)
         }
-        
+    } 
     return connection;
 }

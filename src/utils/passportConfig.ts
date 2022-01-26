@@ -11,8 +11,9 @@ export class PassportConfig {
             new Strategy(
                 {   
                     // Secret should be more complex and stored in a vault outside of dev
-                    secretOrKey: secret,
                     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+                    secretOrKey: secret,
+                    
                 },
                 async(token, done) => {
                     try{
