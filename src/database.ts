@@ -35,7 +35,14 @@ export const connect = async() => {
         connection = getConnection(config.name)
         APILogger.logger.info(`[ TYPEORM ]: Connection has been established successfully`)
     } catch (error){
-        connection = await createConnection(config)
-    }
+        APILogger.logger.info(`[ TYPEORM ]: Get Connection not established trying to establish new connection`)
+        try {
+            connection = await createConnection(config)
+            APILogger.logger.info(`[ TYPEORM ]: Connection has been established succesfully`)
+        }
+        catch (error){
+            APILogger.logger.info(`[ TYPEORM ]: An error has occured in connecting to the Database. `)
+        }
+        
     return connection;
 }
