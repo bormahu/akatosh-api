@@ -1,12 +1,14 @@
 import * as dotenv from 'dotenv';
 
 dotenv.config({
-    path:'/Users/neilshevlin/Desktop/akatosh-api/.env'
+    // SET YOUR LOCAL PATH TO YOUR ENV FILE
+    path:'PATH'
 })
 // port config
 // export const port = Number(process.env.API_PORT);
 
 // Database config
+
 export const db_host = String(process.env.MYSQL_DB_HOST);
 export const db_port = Number(process.env.MYSQL_PORT);
 export const db_name = String(process.env.MYSQL_DB);
