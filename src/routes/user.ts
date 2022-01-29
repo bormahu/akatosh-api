@@ -3,10 +3,7 @@ import * as userController from '../controllers/user';
 import { PassportConfig } from '../utils/passportConfig';
 export class UserRoute extends PassportConfig{
   public routes(app):void{
-    app.route('/users').post(
-      passport.authenticate('jwt', {session:false}),
-      userController.addUser,
-      )
+    app.route('/users').post(userController.addUser)
     app.route('/users').patch(
       passport.authenticate('jwt', {session:false}),
       userController.updateUser,
