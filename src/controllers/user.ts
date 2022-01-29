@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken'
 import utils from 'util'
 import { v4 as uuidv4 } from 'uuid';
-
+import { secret } from "../config";
 import { connect } from '../database';
 import { User } from '../entities/User';
 import { APILogger } from '../utils/logger';
@@ -16,23 +16,23 @@ export let addUser = async (req:Request, res:Response, next:NextFunction) => {
     const connection = await connect();
 
     const repo = connection.getRepository(User);
-    
+
     // Add in password encryption
     const user: User = {
       accountCreation: new Date(),
       accountVerified: new Date(),
-      email: req.body.email,
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
+      email: req.body.data.email,
+      firstName: req.body.data.firstName,
+      lastName: req.body.data.lastName,
       latestSignin: new Date(),
-      password: bcrypt.hashSync(req.body.password, 10),
-      userCompany: req.body.userCompany,
+      password: bcrypt.hashSync(req.body.data.password, 10),
+      userCompany: req.body.data.userCompany,
       userId: uuidv4(),
-      userType: req.body.userType,
-      username: req.body.username,
+      userType: req.body.data.userType,
+      username: req.body.data.username,
       verified: false,
     }
-    APILogger.logger.info(`[POST][/users]${user.username}`);
+    APILogger.logger.info(`[POST][/users][addUser] ${user.username}`);
 
     // Add the user to the DB
     await repo.save(user);
@@ -40,7 +40,7 @@ export let addUser = async (req:Request, res:Response, next:NextFunction) => {
     return res.status(201).send(user);
 
   } catch(error) {
-    APILogger.logger.info(`[POST][/users][ERROR]${error}`);
+    APILogger.logger.info(`[POST][/users][addUser][ERROR]${error}`);
     return res.status(500).send(error);
   }
 }
@@ -74,7 +74,7 @@ export let login = async (req:Request, res: Response, next: NextFunction) => {
   try{
     const connection = await connect();
     const repo = await connection.getRepository(User);
-    
+
     const username = req.body.data.username;
     const password = req.body.data.password;
 
@@ -88,7 +88,7 @@ export let login = async (req:Request, res: Response, next: NextFunction) => {
 
     if(validate){
       const body = {id: user.userId, email: user.email}
-      const token = jwt.sign({user:body}, 'top_secret')
+      const token = jwt.sign({user:body}, secret)
       APILogger.logger.info(`[POST][/users/login]: User - ${username} successfuly logged in`);
       return res.json({token: token})
     } else {
@@ -105,7 +105,7 @@ export let removeUser = async (req:Request, res: Response, next: NextFunction) =
     const connection = await connect();
     const repo = await connection.getRepository(User);
 
-    const username = req.body.username;
+    const username = req.body.data.username;
     const user = await repo.findOne({where: {username: username}});
 
     if(user === undefined){
@@ -129,9 +129,7 @@ export let updateUser = async (req:Request, res:Response, next: NextFunction) =>
     const connection = await connect();
     const repo = connection.getRepository(User);
 
-    const reqObj = util.inspect(req)
-    APILogger.logger.info(`${reqObj}`);
-    const username = req.body.username;
+    const username = req.body.data.username;
     APILogger.logger.info(`${username}`);
     const user = await repo.findOne({where: {username: username}});
     
@@ -144,8 +142,8 @@ export let updateUser = async (req:Request, res:Response, next: NextFunction) =>
     
     // What will the policy be here when wanting to change details?
     // ideally it should only work with correct auth
-    user.username = req.body.username || user.username;
-    user.firstName = req.body.firstName || user.firstName;
+    user.username = req.body.data.username || user.username;
+    user.firstName = req.body.data.firstName || user.firstName;
     user.lastName = req.body.data.lastName|| user.lastName;
     user.email = req.body.data.email || user.email;
     user.password = req.body.data.password || user.password;
