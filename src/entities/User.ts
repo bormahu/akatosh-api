@@ -20,14 +20,14 @@ export class User{
 
     @Column("varchar", {
         length: 50,
-        name: "first_name",
+        name: "firstName",
         nullable: false,
     })
     public firstName: String;
 
     @Column("varchar", {
         length: 50,
-        name: "last_name",
+        name: "lastName",
         nullable: false,
     })
     public lastName: String;
@@ -50,13 +50,13 @@ export class User{
 
     @Column("varchar", {
         length: 60,
-        name: "user_company",
+        name: "userCompany",
     })
     public userCompany: String;
 
     @Column("varchar", {
         length: 60,
-        name: "user_type",
+        name: "userType",
     })
     public userType: String;
 
@@ -69,21 +69,21 @@ export class User{
 
     @Column("timestamp", {
         default: () => `now()`,
-        name: "account_creation",
+        name: "accountCreation",
         nullable: false,
     })
     public accountCreation: Date;
 
     @Column("timestamp", {
         default: () => `now()`,
-        name: "account_verified",
+        name: "accountVerified",
         nullable: false,
     })
     public accountVerified: Date;
 
     @Column("timestamp", {
         default: () => `now()`,
-        name: "latest_signin",
+        name: "latestSignin",
         nullable: false,
     })
     public latestSignin: Date;

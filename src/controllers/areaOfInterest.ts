@@ -39,13 +39,13 @@ export let getAreasOfInterest = async (req:Request, res: Response, next:NextFunc
       
       // Should be provided with the tenmentId and the user_id
       const aoi: AreaOfInterest = {
+        aoiArea: req.body.data.aoiArea,
+        aoiGeometry: req.body.data.geometry,
         aoiId: uuidv4(),
-        area: req.body.data.area,
-        creationDate: new Date(),
-        geometry: req.body.data.geometry,
-        jurisdiction: req.body.data.jurisdiction,
-        lastUpdate: new Date(),   
+        aoiJurisdiction: req.body.data.jurisdiction,
+        lastUpdate: new Date(),
         ownerId: req.body.data.ownerId,      
+        watchStartDate: new Date(),   
       }
       APILogger.logger.info(`[POST][/aoi]${aoi.aoiId}`);
   

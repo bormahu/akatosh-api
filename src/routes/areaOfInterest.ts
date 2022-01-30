@@ -1,11 +1,23 @@
+import * as passport from 'passport'
 import * as AOIController from '../controllers/areaOfInterest';
-
-export class AreaOfInterestRoute{
+import { PassportConfig } from '../utils/passportConfig';
+export class AreaOfInterestRoute extends PassportConfig{
   public routes(app):void{
-    app.route('/aoi').post(AOIController.addAreaOfInterest)
-    app.route('/aoi').patch(AOIController.updateAreaOfInterest)
-    app.route('/aoi').delete(AOIController.removeAreaOfInterest)
-    app.route('/aoi').get(AOIController.getAreasOfInterest)
-
+    app.route('/aoi').post(
+      passport.authenticate('jwt', {session:false}),
+      AOIController.addAreaOfInterest
+      )
+    app.route('/aoi').patch(
+      passport.authenticate('jwt', {session:false}),
+      AOIController.updateAreaOfInterest
+      )
+    app.route('/aoi').delete(
+      passport.authenticate('jwt', {session:false}),
+      AOIController.removeAreaOfInterest
+      )
+    app.route('/aoi').get(
+      passport.authenticate('jwt', {session:false}),
+      AOIController.getAreasOfInterest
+      )
   }
 }

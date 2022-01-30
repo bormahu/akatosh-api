@@ -11,6 +11,7 @@
     "interface-name": false,
     "max-classes-per-file": false,
     "no-var-requires": false,
-    "ban-types": false
+    "ban-types": false,
+    "no-console": false
   }
 }
