@@ -12,7 +12,7 @@ export let getCompany = async (req: Request, res:Response, next: NextFunction) =
     const repo = await connection.getRepository(Company);
 
     const companyName = req.query.companyName;
-    APILogger.logger.info(`[GET][/company]${companyName}`);
+    APILogger.logger.info(`[GET][/company][request query] ${companyName}`);
 
     const company = await repo.findOne({where: {companyName: companyName}});
 
@@ -37,9 +37,9 @@ export let addCompany = async (req:Request, res:Response, next: NextFunction) =>
       activeUserAccounts: 1,
       companyAccountCreationDate: new Date(),
       companyId: uuidv4(),
-      companyLocation: req.body.companyLocation,
-      companyName: req.body.companyName,
-      companySize: req.body.companySize,
+      companyLocation: req.body.data.companyLocation,
+      companyName: req.body.data.companyName,
+      companySize: req.body.data.companySize,
     }
     APILogger.logger.info(`[POST][/company]${company.companyName}`);
 
@@ -57,7 +57,7 @@ export let updateCompany = async (req:Request, res:Response, next:NextFunction) 
     const connection = await connect();
     const repo = await connection.getRepository(Company);
 
-    const companyName = req.body.companyName;
+    const companyName = req.body.data.companyName;
     const company = await repo.findOne({where: { companyName: companyName }});
 
     if(company === undefined){
@@ -65,9 +65,9 @@ export let updateCompany = async (req:Request, res:Response, next:NextFunction) 
       return res.status(404).send(`Company: ${companyName} does not exist`)
     }
     APILogger.logger.info(`[PATCH][/company]${company.companyName}`);
-    company.companyName = req.body.companyName || company.companyName;
-    company.companySize = req.body.companySize || company.companySize;
-    company.companyLocation = req.body.companyLocation || company.companyLocation;
+    company.companyName = req.body.data.companyName || company.companyName;
+    company.companySize = req.body.data.companySize || company.companySize;
+    company.companyLocation = req.body.data.companyLocation || company.companyLocation;
 
     await repo.save(company)
     return res.status(204).send(`${company.companyName} details updated`)
@@ -83,7 +83,7 @@ export let removeCompany = async (req:Request, res:Response, next:NextFunction)=
     const connection = await connect();
     const repo = await connection.getRepository(Company);
 
-    const companyName = req.body.companyName;
+    const companyName = req.body.data.companyName;
     const company = await repo.findOne({where: {companyName: companyName}})
 
     if(company === undefined){

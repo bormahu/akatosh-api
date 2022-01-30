@@ -8,32 +8,32 @@ export class Company {
 
     @Column("varchar", {
         length: 100, 
-        name: "company_name", 
+        name: "companyName", 
     })
     public companyName: String;
 
     @Column("varchar", {
         length: 100,
-        name: "company_size", 
+        name: "companySize", 
     })
     public companySize: String;
 
     @Column("varchar", {
         length: 100,
-        name: "company_location", 
+        name: "companyLocation", 
     })
     public companyLocation: String;
 
     @Column("timestamp", {
         default: () => `now()`,
-        name: "company_account_creation_date",
+        name: "companyAccountCreationDate",
         nullable: false,
     })
     public companyAccountCreationDate: Date;
 
     @Column("integer",{
         default: 1,
-        name: "active_user_accounts",
+        name: "activeUserAccounts",
         nullable: false
     })
     public activeUserAccounts: Number;

@@ -5,6 +5,7 @@ import * as dotenv from 'dotenv';
 import * as express from 'express';
 import * as expressWinston from 'express-winston';
 import * as morgan from 'morgan';
+import * as passport from 'passport';
 import * as winston from 'winston';
 
 import {APILogger} from './utils/logger';
@@ -34,8 +35,9 @@ class App {
   constructor() {
     this.app = express();
     this.apiRoutes.routes(this.app);
-    this.app.use(bodyParser.json())
+    this.app.use(bodyParser.json());
     this.indexRoutes.routes(this.app);
+    this.app.use(passport.initialize());
     this.companyRoutes.routes(this.app);
     this.userRoutes.routes(this.app);
     this.watchedTenementRoutes.routes(this.app);

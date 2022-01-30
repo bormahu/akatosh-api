@@ -8,7 +8,34 @@ import { WatchedTenements } from '../entities/WatchedTenements'
 import {APILogger} from '../utils/logger';
 
 
-export let getWatchedTenements = async (req:Request, res: Response, next:NextFunction)=> {
+export let getWatchById = async (req:Request, res: Response, next:NextFunction)=> {
+  try{
+    const connection = await connect();
+    const repo = await connection.getRepository(WatchedTenements);
+
+
+    const watchId = req.query.watchId;
+
+    // Have to grab the tenements with the correct parent owner
+    // repo.find will return an object, as opposed to undefined which will not be caught
+    const tenement = await repo.findOne({where: {watchId: watchId}})
+    APILogger.logger.info(`[GET][/watch][Returned Object]:${tenement}`);
+    // const type = typeof tenement;
+    // APILogger.logger.info(`[GET][/watch][Returned TYPE]:${type}`);
+
+    if(tenement === undefined){
+      APILogger.logger.info(`[GET][/watch]: failed to find any tenement with watchId: ${watchId}`);
+      return res.status(404).send(`No watched tenement with watchId ${watchId}`)
+    }
+    APILogger.logger.info(`[GET][/watch]: Returned tenement to ${watchId}`);
+    return res.status(200).send(tenement);
+
+  }catch(error){
+    APILogger.logger.info(`[GET][/watch][ERROR]${error}`);
+    return res.status(500).send(error);
+  }
+}
+export let getWatchesByOwnerId = async (req:Request, res: Response, next:NextFunction)=> {
   try{
     const connection = await connect();
     const repo = await connection.getRepository(WatchedTenements);
@@ -20,9 +47,9 @@ export let getWatchedTenements = async (req:Request, res: Response, next:NextFun
     // repo.find will return an object, as opposed to undefined which will not be caught
     const tenements = await repo.find({where: {ownerId: ownerId}})
     APILogger.logger.info(`[GET][/watch][Returned Object]:${tenements}`);
-    const type = typeof tenements;
+    // const type = typeof tenements;
 
-    APILogger.logger.info(`[GET][/watch][Returned TYPE]:${type}`);
+    // APILogger.logger.info(`[GET][/watch][Returned TYPE]:${type}`);
 
     if(tenements === undefined || tenements.length === 0){
       APILogger.logger.info(`[GET][/watch]: failed to find any tenements with ownerId: ${ownerId}`);
@@ -104,8 +131,6 @@ export let removeWatchedTenement = async (req:Request, res: Response, next:NextF
     const connection = await connect();
     const repo = connection.getRepository(WatchedTenements);
     // Some issue here with the request coming in to the contoller
-    const obj = util.inspect(req)
-    APILogger.logger.info(`[DELETE][/watch]: request of ${obj}`);
     const watchId = req.body.data.watchId;
 
     const tenement = await repo.findOne({where: {watchId: watchId}});

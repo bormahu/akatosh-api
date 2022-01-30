@@ -9,21 +9,21 @@ export class WatchedTenements {
     public watchId: String;
 
     @Column("uuid", {
-        name: "owner_id",
+        name: "ownerId",
         nullable: false
     })
     public ownerId: String;
 
     @Column("timestamp", {
         default: () => `now()`,
-        name: "watch_start_date",  
+        name: "watchStartDate",  
         nullable: true,
     })
     public watchStartDate: Date;
 
     @Column("timestamp", {
         default: () => `now()`,
-        name: "watch_last_update",  
+        name: "watchLastUpdate",  
         nullable: true,
     })
     public watchLastUpdate: Date;
