@@ -18,59 +18,59 @@ export class GlobalTenements {
 
     @Column("varchar", {
         length: 120, 
-        name: "licence_special", 
+        name: "licenceSpecial", 
         nullable: true,
     })
     public licenceSpecial: String;
 
     @Column("varchar", {
         length: 120, 
-        name: "survey_status", 
+        name: "surveyStatus", 
         nullable: false,
     })
     public surveyStatus: String;
 
     @Column("varchar", {
         length: 120, 
-        name: "tenement_status", 
+        name: "tenementStatus", 
         nullable: false,
     })
     public tenementStatus: String;
 
     @Column("datetime", {
-        name: "licence_start_date",  
+        name: "licenceStartDate",  
         nullable: true,
     })
     public licenceStartDate: Date;
 
     @Column("datetime", {
-        name: "licence_end_date",  
+        name: "licenceEndDate",  
         nullable: true,
     })
     public licenceEndDate: Date;
 
     @Column("datetime", {
-        name: "licence_grant_date",  
+        name: "licenceGrantDate",  
         nullable: true,
     })
     public licenceGrantDate: Date;
 
     @Column("varchar", {
         length: 120, 
-        name: "primary_tenement_holder", 
+        name: "primaryTenementHolder", 
         nullable: true,
     })
     public primaryTenementHolder: String;
 
     @Column("decimal", {
         default: 0.0,
-        name: "tenement_area", 
+        name: "tenementArea", 
     })
     public tenementArea: Number;
 
     // geometry column may have to be adjusted to allow for correct support for geometries. 
     @Column("geometry", {
-        name: "tenement_geometry",
+        name: "tenementGeometry",
         nullable: true,
     })
     public tenementGeometry: String;

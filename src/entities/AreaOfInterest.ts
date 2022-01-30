@@ -7,41 +7,41 @@ export class AreaOfInterest {
     public aoiId: String;
 
     @Column("uuid", {
-        name: "owner_id",
+        name: "ownerId",
         nullable: false
     })
     public ownerId: String;
 
     @Column("timestamp", {
         default: () => `now()`,
-        name: "watch_start_date",  
+        name: "watchStartDate",  
         nullable: true,
     })
-    public creationDate: Date;
+    public watchStartDate: Date;
 
     @Column("timestamp", {
         default: () => `now()`,
-        name: "last_update",  
+        name: "lastUpdate",  
         nullable: true,
     })
     public lastUpdate: Date;
 
     @Column("varchar", {
         length: 120, 
-        name: "aoi_jurisdiction", 
+        name: "aoiJurisdiction", 
         nullable: true,
     })
-    public jurisdiction: String;
+    public aoiJurisdiction: String;
 
     @Column("decimal", {
         default: 0.0,
-        name: "aoi_area", 
+        name: "aoiArea", 
     })
-    public area: Number;
+    public aoiArea: Number;
 
     @Column("geometry", {
-        name: "aoi_geometry",
+        name: "aoiGeometry",
         nullable: true,
     })
-    public geometry: String;
+    public aoiGeometry: String;
 }
