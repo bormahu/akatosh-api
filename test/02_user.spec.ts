@@ -21,13 +21,13 @@ const expect = chai.expect
 const user = {
   // Generic values for testing
   data : {
-    email: 'test@test.com',
-    firstName: 'test',
-    lastName: 'test',
-    password: 'test',
-    userCompany: 'test',
-    userType: 'admin',
-    username: 'tester',
+    email: "test@test.com",
+    firstName: "test",
+    lastName: "test",
+    password: "test",
+    userCompany: "test",
+    userType: "admin",
+    username: "tester",
   }
 }
 
