@@ -13,10 +13,12 @@
     "test:mutation": "stryker run",
     "stryker:init": "stryker init",
     "mondev": "nodemon dev",
-    "dev": "nodemon",
+    "dev": "cross-env PORT=3000 NODE_ENV=dev ts-node ./src/server.ts",
     "prod": "PORT=3000 npm run build && npm run start",
-    "tsc": "tsc",
-    "test-DB-connection": "ts-node ./src/database.ts"
+    "test-DB-connection": "ts-node ./src/database.ts",
+    "prestart":"node dist/config.js",
+    "start":"NODE_ENV=prod node dist/server.js",
+    "tsc": "tsc"
   },
   "engines": {
     "node": ">=8.0.0"
