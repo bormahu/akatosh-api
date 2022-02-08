@@ -1,6 +1,8 @@
 FROM node:10
 
 ENV NODE_ENV production
+ENV PORT="3000"
+
 
 # Create the app directory
 RUN mkdir -p /usr/src/app
