@@ -9,12 +9,12 @@ import * as passport from 'passport';
 import * as winston from 'winston';
 
 import {APILogger} from './utils/logger';
-import { APIRoute } from '../src/routes/api';
+import { APIRoute } from './routes/api';
 import { AreaOfInterestRoute } from './routes/areaOfInterest';
-import { CompanyRoute } from '../src/routes/company';
+import { CompanyRoute } from './routes/company';
 import { GlobalTenementRoute } from './routes/globalTenements';
-import { Index } from '../src/routes/index';
-import { UserRoute } from '../src/routes/user';
+import { Index } from './routes/index';
+import { UserRoute } from './routes/user';
 import { WatchedTenementRoute } from './routes/watchedTenement';
 
 dotenv.config({
