@@ -3,12 +3,8 @@ import * as https from 'https'
 
 import app from './app';
 
-const PORT = process.env.PORT
-const httpsOptions = {
-    key: fs.readFileSync('./config/key.pem'),
-    cert: fs.readFileSync('./config/cert.pem')
-}
-https.createServer(httpsOptions, app).listen(PORT, ()=>{
-    console.log(`Server started. Listerning on port ${PORT}`)
-})
 
+const PORT = process.env.PORT || 3001
+app.listen(PORT, ()=>{
+    console.log(`Server started. Listening on port ${PORT}`)
+})
