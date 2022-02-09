@@ -16,8 +16,8 @@
     "dev": "cross-env PORT=3000 NODE_ENV=dev ts-node ./src/server.ts",
     "prod": "PORT=3000 npm run build && npm run start",
     "test-DB-connection": "ts-node ./src/database.ts",
-    "prestart":"node dist/config.js",
-    "start":"NODE_ENV=prod node dist/server.js",
+    "prestart": "node dist/config.js",
+    "start": "NODE_ENV=prod node dist/server.js",
     "tsc": "tsc"
   },
   "engines": {
@@ -88,6 +88,7 @@
     "sequelize": "^6.6.5",
     "typeorm": "^0.2.38",
     "uuid": "^8.3.2",
-    "winston": "^3.3.3"
+    "winston": "^3.3.3",
+    "winston-aws-cloudwatch": "^3.0.0"
   }
 }
