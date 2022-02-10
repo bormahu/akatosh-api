@@ -27,6 +27,34 @@ export let getTenement = async (req:Request, res: Response, next:NextFunction)=>
       return res.status(500).send(error);
     }
   }
+  export let getTenements = async (req:Request, res: Response, next:NextFunction) =>{
+
+    try{
+      const connection = await connect();
+      const repo = await connection.getRepository(GlobalTenements);
+
+      const offset = req.query.offset;
+      const limit = req.query.limit;
+
+      // find the tenements with an offset and a limit in typeorm 
+      const tenements = await repo.find({
+        skip: Number(offset),
+        take: Number(limit)
+      });
+      APILogger.logger.info(`[GET][/paginatedTenements]: Getting values from ${offset} to ${limit}`);
+
+      if(tenements ===undefined || tenements.length === 0){
+        APILogger.logger.info(`[GET][/paginatedTenements]: No tenements found`);
+        return res.status(404).send(`No tenements found`);
+      }
+      APILogger.logger.info(`[GET][/paginatedTenements]: Returned tenements to user from ${offset} to ${limit}`);
+      return res.status(200).send(tenements);
+
+    }catch (error) {
+        APILogger.logger.info(`[GET][/paginatedTenements][ERROR]${error}`);
+        return res.status(500).send(error);
+      } 
+  }
   export let updateGlobalTenement = async (req:Request, res: Response, next:NextFunction)=>{
     // route to update a tenement
     try{
