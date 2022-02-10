@@ -12,6 +12,10 @@ export class GlobalTenementRoute extends PassportConfig{
       passport.authenticate('jwt', {session:false}),
       globalTenementController.getTenement
       )
+    app.route('/tenements').get(
+      passport.authenticate('jwt', {session:false}),
+      globalTenementController.getTenements
+    )
     app.route('/tenement').patch(
       passport.authenticate('jwt', {session:false}),
       globalTenementController.updateGlobalTenement
