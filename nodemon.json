@@ -1,5 +1,5 @@
 {
-    "watch": ["server"],
+    "watch": ["src/"],
     "exec": "cross-env PORT=3000 NODE_ENV=dev ts-node ./src/server.ts",
-    "ext": "js"
+    "ext": "js,ts,json"
   } 
