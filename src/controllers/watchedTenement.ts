@@ -45,7 +45,7 @@ export let getWatchesByOwnerId = async (req:Request, res: Response, next:NextFun
 
     // Have to grab the tenements with the correct parent owner
     // repo.find will return an object, as opposed to undefined which will not be caught
-    const tenements = await repo.find({where: {ownerId: ownerId}})
+    const tenements = await repo.find({where: {ownerId: ownerId}, relations:['tenement']})
     APILogger.logger.info(`[GET][/watch][Returned Object]:${tenements}`);
     // const type = typeof tenements;
 
