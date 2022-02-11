@@ -40,12 +40,12 @@ export let getWatchesByOwnerId = async (req:Request, res: Response, next:NextFun
     const connection = await connect();
     const repo = await connection.getRepository(WatchedTenements);
 
-
+    console.log(req)
     const ownerId = req.query.ownerId;
 
     // Have to grab the tenements with the correct parent owner
     // repo.find will return an object, as opposed to undefined which will not be caught
-    const tenements = await repo.find({where: {ownerId: ownerId}})
+    const tenements = await repo.find({where: {ownerId: ownerId}, relations:['tenement']})
     APILogger.logger.info(`[GET][/watch][Returned Object]:${tenements}`);
     // const type = typeof tenements;
 
@@ -56,6 +56,7 @@ export let getWatchesByOwnerId = async (req:Request, res: Response, next:NextFun
       return res.status(404).send(`No watched tenements with ownerId ${ownerId}`)
     }
     APILogger.logger.info(`[GET][/watch]: Returned tenements to ${ownerId}`);
+    console.log(tenements)
     return res.status(200).send(tenements);
 
   }catch(error){
