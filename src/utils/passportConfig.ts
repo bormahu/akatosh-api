@@ -13,6 +13,11 @@ export class PassportConfig {
                     // Secret should be more complex and stored in a vault outside of dev
                     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
                     secretOrKey: secret,
+                    // json web token used for authentication and sessions
+                    jsonWebTokenOptions:{
+                        maxAge: '2h'
+                    }
+
                     
                 },
                 async(token, done) => {
