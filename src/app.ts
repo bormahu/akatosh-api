@@ -16,6 +16,7 @@ import { GlobalTenementRoute } from './routes/globalTenements';
 import { Index } from './routes/index';
 import { UserRoute } from './routes/user';
 import { WatchedTenementRoute } from './routes/watchedTenement';
+import { AuthRoute } from './routes/auth'; 
 
 dotenv.config({
   path:'/Users/neilshevlin/Desktop/akatosh-api/.env'
@@ -30,6 +31,7 @@ class App {
   public watchedTenementRoutes:WatchedTenementRoute = new WatchedTenementRoute();
   public globalTenementRoutes: GlobalTenementRoute = new GlobalTenementRoute();
   public areaOfInterestRoutes: AreaOfInterestRoute = new AreaOfInterestRoute();
+  public authRoutes: AuthRoute = new AuthRoute();
 
 
   constructor() {
@@ -44,6 +46,7 @@ class App {
     this.watchedTenementRoutes.routes(this.app);
     this.globalTenementRoutes.routes(this.app);
     this.areaOfInterestRoutes.routes(this.app);
+    this.authRoutes.routes(this.app);
     // this.app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
     this.app.use(
       expressWinston.errorLogger({
