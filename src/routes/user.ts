@@ -16,6 +16,5 @@ export class UserRoute extends PassportConfig{
       passport.authenticate('jwt', {session:false}),
       userController.getUser,
       )
-    app.route('/users/login').post(userController.login)
   }
 }
