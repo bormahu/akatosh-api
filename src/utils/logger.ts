@@ -17,8 +17,10 @@ export class APILogger{
         ),
         level:'info',
         transports:[
+            
             new transports.File({filename:'aggregated.log'}),
             new transports.Console(),
+            // transports needed for cloudwatch
             new CloudWatchTransport({
                 logGroupName:'Akatosh-API-logs',
                 logStreamName: 'Akatosh-API-logstream',
