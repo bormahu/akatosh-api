@@ -1,22 +1,21 @@
-import * as passport from 'passport'
 import * as companyController from '../controllers/company';
-import { PassportConfig } from '../utils/passportConfig';
-export class CompanyRoute extends PassportConfig{
+import { authMiddleware } from '../utils/auth0';
+export class CompanyRoute {
   public routes(app):void{
     app.route('/companies').post(
-      passport.authenticate('jwt', {session:false}),
+      authMiddleware,
       companyController.addCompany
       )
     app.route('/companies').patch(
-      passport.authenticate('jwt', {session:false}),
+      authMiddleware,
       companyController.updateCompany
       )
     app.route('/companies').delete(
-      passport.authenticate('jwt', {session:false}),
+      authMiddleware,
       companyController.removeCompany
       )
-    app.route('/companies/').get(
-      passport.authenticate('jwt', {session:false}),
+    app.route('/companies').get(
+      authMiddleware,
       companyController.getCompany
       )
   }
