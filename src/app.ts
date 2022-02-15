@@ -16,7 +16,7 @@ import { GlobalTenementRoute } from './routes/globalTenements';
 import { Index } from './routes/index';
 import { UserRoute } from './routes/user';
 import { WatchedTenementRoute } from './routes/watchedTenement';
-import { AuthRoute } from './routes/auth'; 
+import { AuthRoute } from './routes/auth';
 
 dotenv.config({
   path:'/Users/neilshevlin/Desktop/akatosh-api/.env'
