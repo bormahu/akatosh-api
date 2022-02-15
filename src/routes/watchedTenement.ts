@@ -1,28 +1,26 @@
-import * as passport from 'passport';
 import * as tenementController from '../controllers/watchedTenement';
-import { PassportConfig } from '../utils/passportConfig';
-
-export class WatchedTenementRoute extends PassportConfig{
+import { authMiddleware } from '../utils/auth0';
+export class WatchedTenementRoute{
   public routes(app):void{
-    app.route('/watch').post(
-      passport.authenticate('jwt', {session:false}),
-      tenementController.addWatchedTenement,
+    app.route('/watch').post( 
+      authMiddleware, 
+      tenementController.addWatchedTenement
       )
-    app.route('/watch').patch(
-      passport.authenticate('jwt', {session:false}),
-      tenementController.updateWatchedTenement,
+    app.route('/watch').patch( 
+      authMiddleware, 
+      tenementController.updateWatchedTenement
       )
-    app.route('/watch').delete(
-      passport.authenticate('jwt', {session:false}),
-      tenementController.removeWatchedTenement,
+    app.route('/watch').delete( 
+      authMiddleware, 
+      tenementController.removeWatchedTenement
       )
-    app.route('/watch/').get(
-      passport.authenticate('jwt', {session:false}),
-      tenementController.getWatchById,
+    app.route('/watch/').get( 
+      authMiddleware, 
+      tenementController.getWatchById
       )
-    app.route('/watch/owner').get(
-      passport.authenticate('jwt', {session:false}),
-      tenementController.getWatchesByOwnerId,
-    )
+    app.route('/watch/owner').get( 
+      authMiddleware, 
+      tenementController.getWatchesByOwnerId
+      )
   }
 }
