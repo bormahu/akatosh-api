@@ -6,7 +6,8 @@ export class AreaOfInterest {
     @PrimaryGeneratedColumn("uuid")
     public aoiId: String;
 
-    @Column("uuid", {
+    @Column("varchar", {
+        length: 255,
         name: "ownerId",
         nullable: false
     })
