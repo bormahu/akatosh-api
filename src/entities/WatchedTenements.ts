@@ -8,7 +8,8 @@ export class WatchedTenements {
     @PrimaryGeneratedColumn("uuid")
     public watchId: String;
 
-    @Column("uuid", {
+    @Column("varchar", {
+        length: 255,
         name: "ownerId",
         nullable: false
     })
