@@ -3,7 +3,7 @@ import { v4 as uuidv4 }  from 'uuid';
 import { connect } from '../database';
 import { AreaOfInterest } from '../entities/AreaOfInterest';
 import { APILogger } from '../utils/logger';
-
+import jwt_decode from "jwt-decode";
 
 
 
@@ -12,7 +12,19 @@ export let getAreasOfInterest = async (req:Request, res: Response, next:NextFunc
         const connection = await connect();
         const repo = await connection.getRepository(AreaOfInterest);
         
-        const ownerId = req.query.ownerId
+        const token = req.headers.authorization;
+        var decoded: any  = jwt_decode(token);
+        const tokenPayload = {
+          iss: decoded.iss || null,
+          sub: decoded.sub || null,
+          aud: decoded.aud || null,
+          iat: decoded.iat || null,
+          exp: decoded.exp || null,
+          azp: decoded.azp || null,
+          scope: decoded.scope || null
+        }
+
+        const ownerId = tokenPayload.sub;
   
         // Have to grab the tenements with the correct parent owner
         const aoi = await repo.find({where: {ownerId: ownerId}})
@@ -35,7 +47,20 @@ export let getAreasOfInterest = async (req:Request, res: Response, next:NextFunc
     try{
       const connection = await connect();
       const repo = await connection.getRepository(AreaOfInterest);
-      
+
+      const token = req.headers.authorization;
+      var decoded: any  = jwt_decode(token);
+      const tokenPayload = {
+        iss: decoded.iss || null,
+        sub: decoded.sub || null,
+        aud: decoded.aud || null,
+        iat: decoded.iat || null,
+        exp: decoded.exp || null,
+        azp: decoded.azp || null,
+        scope: decoded.scope || null
+        }
+
+      const ownerId = tokenPayload.sub;
       
       // Should be provided with the tenmentId and the user_id
       const aoi: AreaOfInterest = {
@@ -44,7 +69,7 @@ export let getAreasOfInterest = async (req:Request, res: Response, next:NextFunc
         aoiId: uuidv4(),
         aoiJurisdiction: req.body.data.jurisdiction,
         lastUpdate: new Date(),
-        ownerId: req.body.data.ownerId,      
+        ownerId: ownerId,      
         watchStartDate: new Date(),   
       }
       APILogger.logger.info(`[POST][/aoi]${aoi.aoiId}`);
@@ -64,9 +89,21 @@ export let getAreasOfInterest = async (req:Request, res: Response, next:NextFunc
     try{
       const connection = await connect();
       const repo = connection.getRepository(AreaOfInterest);
-  
+
+      const token = req.headers.authorization;
+      var decoded: any  = jwt_decode(token);
+      const tokenPayload = {
+        iss: decoded.iss || null,
+        sub: decoded.sub || null,
+        aud: decoded.aud || null,
+        iat: decoded.iat || null,
+        exp: decoded.exp || null,
+        azp: decoded.azp || null,
+        scope: decoded.scope || null
+      }
+      const ownerId = tokenPayload.sub;
       const aoiId = req.body.data.aoiId;
-      const ownerId = req.body.data.ownerId;
+
       const aoi =  await repo.findOne({where: {
         aoiId: aoiId,
         ownerId: ownerId
@@ -94,11 +131,31 @@ export let getAreasOfInterest = async (req:Request, res: Response, next:NextFunc
     try{
       const connection = await connect();
       const repo = connection.getRepository(AreaOfInterest);
-  
+
+      const token = req.headers.authorization;
+      var decoded: any  = jwt_decode(token);
+      const tokenPayload = {
+        iss: decoded.iss || null,
+        sub: decoded.sub || null,
+        aud: decoded.aud || null,
+        iat: decoded.iat || null,
+        exp: decoded.exp || null,
+        azp: decoded.azp || null,
+        scope: decoded.scope || null
+      }
+      const ownerId = tokenPayload.sub;
+
       const aoiId = req.body.data.aoiId;
+      
   
-      const aoi = await repo.findOne({where: {aoiId: aoiId}});
-  
+      const aoi = await repo.findOne({where: {
+        aoiId: aoiId, 
+        ownerId: ownerId
+      }});
+      if(aoi.ownerId != ownerId){
+        APILogger.logger.info(`[DELETE][/aoi]: incorerect user id passed for aoi with id ${aoiId}`);
+        return res.status(404).send(`incorrect ownerId passed for aoi with id ${aoiId}`);
+      }
       if( aoi === undefined){
         APILogger.logger.info(`[DELETE][/aoi]: failed to find are of interest id: ${aoiId}`);
         return res.status(404).send(`Area of interesr with id ${aoiId} does not exist`);
