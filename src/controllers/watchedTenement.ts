@@ -6,7 +6,7 @@ import { connect } from '../database';
 import { GlobalTenements } from '../entities/GlobalTenements';
 import { WatchedTenements } from '../entities/WatchedTenements'
 import {APILogger} from '../utils/logger';
-
+import jwt_decode from "jwt-decode";
 
 export let getWatchById = async (req:Request, res: Response, next:NextFunction)=> {
   try{
@@ -39,9 +39,21 @@ export let getWatchesByOwnerId = async (req:Request, res: Response, next:NextFun
   try{
     const connection = await connect();
     const repo = await connection.getRepository(WatchedTenements);
-
-
-    const ownerId = req.query.ownerId;
+  
+    // decode the jwt
+    const token = req.headers.authorization;
+    var decoded: any  = jwt_decode(token);
+    // create a typescipt object with the decoded jwt WITH types
+    const tokenPayload = {
+      iss: decoded.iss || null,
+      sub: decoded.sub || null,
+      aud: decoded.aud || null,
+      iat: decoded.iat || null,
+      exp: decoded.exp || null,
+      azp: decoded.azp || null,
+      scope: decoded.scope || null
+    }
+    const ownerId = tokenPayload.sub;
 
     // Have to grab the tenements with the correct parent owner
     // repo.find will return an object, as opposed to undefined which will not be caught
@@ -73,9 +85,23 @@ export let addWatchedTenement = async (req:Request, res: Response, next:NextFunc
     const tenementId = req.body.data.tenementId;
     const tenement = await tenRepo.findOne({where: {tenementId: tenementId}})
 
-    // Should be provided with the tenmentId and the user_id
+    const token = req.headers.authorization;
+    var decoded: any  = jwt_decode(token);
+    const tokenPayload = {
+      iss: decoded.iss || null,
+      sub: decoded.sub || null,
+      aud: decoded.aud || null,
+      iat: decoded.iat || null,
+      exp: decoded.exp || null,
+      azp: decoded.azp || null,
+      scope: decoded.scope || null
+    }
+
+
+    // The request header will contain the sub (subject) of the JWT
+    // We can use this instead of the userId
     const watchedTenement: WatchedTenements = {
-      ownerId: req.body.data.ownerId,
+      ownerId: tokenPayload.sub,
       tenement: tenement,
       watchId: uuidv4(),
       watchLastUpdate: new Date(),
@@ -99,8 +125,20 @@ export let updateWatchedTenement = async (req:Request, res: Response, next:NextF
     const connection = await connect();
     const repo = connection.getRepository(WatchedTenements);
 
+    const token = req.headers.authorization;
+    var decoded: any  = jwt_decode(token);
+    const tokenPayload = {
+      iss: decoded.iss || null,
+      sub: decoded.sub || null,
+      aud: decoded.aud || null,
+      iat: decoded.iat || null,
+      exp: decoded.exp || null,
+      azp: decoded.azp || null,
+      scope: decoded.scope || null
+    }
+
     const watchId = req.body.data.watchId;
-    const ownerId = req.body.data.ownerId
+    const ownerId = tokenPayload.sub;
     const watchedTenement =  await repo.findOne({where: {
       ownerId: ownerId,
       watchId: watchId,
