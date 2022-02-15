@@ -17,3 +17,5 @@ export const secret = String(process.env.JWT_SECRET);
 export const logger_access_key_id = String(process.env.LOGGER_ACCESS_KEY_ID);
 export const logger_secret_key = String(process.env.LOGGER_SECRET_KEY);
 export const logger_region = String(process.env.LOGGER_REGION);
+export const auth0_domain = String(process.env.AUTH0_DOMAIN);
+export const auth0_base_url = String(process.env.AUTH0_BASE_URL);
