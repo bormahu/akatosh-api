@@ -7,7 +7,6 @@ import {APILogger} from './utils/logger';
 import { AreaOfInterest } from './entities/AreaOfInterest';
 import { Company } from './entities/Company';
 import { GlobalTenements } from './entities/GlobalTenements';
-import { User } from './entities/User';
 import { WatchedTenements } from './entities/WatchedTenements';
 
 export const config: ConnectionOptions = {
@@ -23,7 +22,7 @@ export const config: ConnectionOptions = {
     legacySpatialSupport: false,
 
     // Insert the entities
-    entities: [ User , Company, WatchedTenements, GlobalTenements, AreaOfInterest],
+    entities: [ Company, WatchedTenements, GlobalTenements, AreaOfInterest],
 
 }
 export const connect = async() => {
