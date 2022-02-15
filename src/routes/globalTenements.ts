@@ -1,27 +1,25 @@
-import * as passport from 'passport';
 import * as globalTenementController from '../controllers/globalTenements';
-import { PassportConfig } from '../utils/passportConfig';
-
-export class GlobalTenementRoute extends PassportConfig{
+import { authMiddleware } from '../utils/auth0';
+export class GlobalTenementRoute{
   public routes(app):void{
     app.route('/tenement').post(
-      passport.authenticate('jwt', {session:false}),
+      authMiddleware,
       globalTenementController.addGlobalTenement
       )
     app.route('/tenement').get(
-      passport.authenticate('jwt', {session:false}),
+      authMiddleware,
       globalTenementController.getTenement
       )
     app.route('/tenements').get(
-      passport.authenticate('jwt', {session:false}),
+      authMiddleware,
       globalTenementController.getTenements
     )
     app.route('/tenement').patch(
-      passport.authenticate('jwt', {session:false}),
+      authMiddleware,
       globalTenementController.updateGlobalTenement
       )
     app.route('/tenement').delete(
-      passport.authenticate('jwt', {session:false}),
+      authMiddleware,
       globalTenementController.removeGlobalTenement
       )
   }
