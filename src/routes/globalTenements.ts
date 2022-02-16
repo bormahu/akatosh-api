@@ -2,25 +2,25 @@ import * as globalTenementController from '../controllers/globalTenements';
 import { authMiddleware } from '../utils/auth0';
 export class GlobalTenementRoute{
   public routes(app):void{
-    app.route('/tenement').post(
+    app.route('/tenements').post(
       authMiddleware,
       globalTenementController.addGlobalTenement
       )
-    app.route('/tenement').get(
+    app.route('/tenements').patch(
       authMiddleware,
-      globalTenementController.getTenement
+      globalTenementController.updateGlobalTenement
+      )
+    app.route('/tenements').delete(
+      authMiddleware,
+      globalTenementController.removeGlobalTenement
       )
     app.route('/tenements').get(
       authMiddleware,
       globalTenementController.getTenements
-    )
-    app.route('/tenement').patch(
-      authMiddleware,
-      globalTenementController.updateGlobalTenement
       )
-    app.route('/tenement').delete(
+    app.route('/tenements/:id').get(
       authMiddleware,
-      globalTenementController.removeGlobalTenement
+      globalTenementController.getTenement
       )
   }
 }
