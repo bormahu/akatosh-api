@@ -5,44 +5,77 @@ import { AreaOfInterest } from '../entities/AreaOfInterest';
 import { APILogger } from '../utils/logger';
 import jwt_decode from "jwt-decode";
 
-
-
-export let getAreasOfInterest = async (req:Request, res: Response, next:NextFunction)=> {
+export let getAreaOfInterest = async (req:Request, res: Response, next:NextFunction)=>{
     try{
-        const connection = await connect();
-        const repo = await connection.getRepository(AreaOfInterest);
-        
-        const token = req.headers.authorization;
-        var decoded: any  = jwt_decode(token);
-        const tokenPayload = {
-          iss: decoded.iss || null,
-          sub: decoded.sub || null,
-          aud: decoded.aud || null,
-          iat: decoded.iat || null,
-          exp: decoded.exp || null,
-          azp: decoded.azp || null,
-          scope: decoded.scope || null
-        }
+      const connection = await connect();
+      const repo = await connection.getRepository(AreaOfInterest);
 
-        const ownerId = tokenPayload.sub;
-  
-        // Have to grab the tenements with the correct parent owner
-        const aoi = await repo.find({where: {ownerId: ownerId}})
-        APILogger.logger.info(`[GET][/aoi]:${aoi}`);
-    
-        if(aoi === undefined){
-            APILogger.logger.info(`[GET][/aoi]: failed to find any tenements with ownerId: ${ownerId}`);
-            return res.status(404).send(`No watched tenements with ownerId ${ownerId}`)
-        }
-        APILogger.logger.info(`[GET][/aoi]: Returned aoi to ${ownerId}`);
-        return res.status(200).send(aoi);
-  
+      const aoiId = req.params.id;
+
+      const aoi = await repo.findOne({where: {aoiId: aoiId}});
+      if(aoi === undefined){
+        APILogger.logger.info(`[GET][/areaOfInterest/:id]: failed to find any areaOfInterest with aoiId: ${aoiId}`);
+        return res.status(404).send(`No areaOfInterest with id ${aoiId}`)
+      }
+      return res.status(200).send(aoi);
+
     }catch(error){
-      APILogger.logger.info(`[GET][/aoi][ERROR]${error}`);
+      APILogger.logger.info(`[GET][/areaOfInterest][ERROR]${error}`);
       return res.status(500).send(error);
     }
-  }
+}
+export let getAreasOfInterest = async (req:Request, res: Response, next:NextFunction)=>{
+  try{
+    const connection = await connect();
+    const repo = await connection.getRepository(AreaOfInterest);
 
+    // We may want to do some check internally that a user with correct auth cannot acccess another users resources
+    const skip = Number(req.query.skip) || Number(0);
+    const take = Number(req.query.limit) || Number(100);
+
+    const areasOfInterest = await repo.find({
+      skip: Number(skip),
+      take: Number(take)
+    });
+
+    if (areasOfInterest === undefined || areasOfInterest.length === 0) {
+      APILogger.logger.info(`[GET][/areaOfInterest]: failed to find any areaOfInterest`);
+      return res.status(404).send(`Failed to find any areaOfInterest`)
+    }
+    return res.status(200).send(areasOfInterest);
+
+  }catch(error){
+    APILogger.logger.info(`[GET][/areaOfInterest][ERROR]${error}`);
+    return res.status(500).send(error);
+  }
+}
+
+export let getAreasOfInterestByUser = async (req:Request, res: Response, next:NextFunction)=>{
+  try{
+    const connection = await connect();
+    const repo = await connection.getRepository(AreaOfInterest);
+
+    const userId = req.params.id;
+    const skip = Number(req.query.skip) || Number(0);
+    const limit = Number(req.query.limit) || Number(100);
+
+    const areasOfInterest = await repo.find({
+      where: {userId: userId},
+      skip: Number(skip),
+      take: Number(limit)
+    });
+
+    if(areasOfInterest === undefined || areasOfInterest.length === 0){
+      APILogger.logger.info(`[GET][/areaOfInterest/:id]: failed to find any areaOfInterest with userId: ${userId}`);
+      return res.status(404).send(`No areaOfInterest with id ${userId}`)
+    }
+    return res.status(200).send(areasOfInterest);
+
+  }catch(error){
+    APILogger.logger.info(`[GET][/areaOfInterest][ERROR]${error}`);
+    return res.status(500).send(error);
+  }
+}
   export let addAreaOfInterest = async (req:Request, res: Response, next:NextFunction)=>{
     try{
       const connection = await connect();
