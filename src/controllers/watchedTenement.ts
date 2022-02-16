@@ -8,74 +8,77 @@ import { WatchedTenements } from '../entities/WatchedTenements'
 import {APILogger} from '../utils/logger';
 import jwt_decode from "jwt-decode";
 
-export let getWatchById = async (req:Request, res: Response, next:NextFunction)=> {
+export let getWatch = async (req: Request, res: Response, next: NextFunction) => {
   try{
     const connection = await connect();
     const repo = await connection.getRepository(WatchedTenements);
 
+    // store id that is passed in through watch/:id
+    const watchId = req.params.id;
 
-    const watchId = req.query.watchId;
-
-    // Have to grab the tenements with the correct parent owner
-    // repo.find will return an object, as opposed to undefined which will not be caught
-    const tenement = await repo.findOne({where: {watchId: watchId}})
-    APILogger.logger.info(`[GET][/watch][Returned Object]:${tenement}`);
-    // const type = typeof tenement;
-    // APILogger.logger.info(`[GET][/watch][Returned TYPE]:${type}`);
-
-    if(tenement === undefined){
-      APILogger.logger.info(`[GET][/watch]: failed to find any tenement with watchId: ${watchId}`);
-      return res.status(404).send(`No watched tenement with watchId ${watchId}`)
+    const watch = await repo.findOne({where: { watchId: watchId}});
+    if (watch === undefined) {
+      APILogger.logger.info(`[GET][/watchedTenements]: failed to find any watched tenements with watchId: ${watchId}`);
+      return res.status(404).send(`No watched tenements with watchId ${watchId}`)
     }
-    APILogger.logger.info(`[GET][/watch]: Returned tenement to ${watchId}`);
-    return res.status(200).send(tenement);
+    return res.status(200).send(watch);
 
   }catch(error){
     APILogger.logger.info(`[GET][/watch][ERROR]${error}`);
     return res.status(500).send(error);
   }
 }
-export let getWatchesByOwnerId = async (req:Request, res: Response, next:NextFunction)=> {
+export let getWatches = async (req: Request, res: Response, next: NextFunction) => {
   try{
     const connection = await connect();
     const repo = await connection.getRepository(WatchedTenements);
-  
-    // decode the jwt
-    const token = req.headers.authorization;
-    var decoded: any  = jwt_decode(token);
-    // create a typescipt object with the decoded jwt WITH types
-    const tokenPayload = {
-      iss: decoded.iss || null,
-      sub: decoded.sub || null,
-      aud: decoded.aud || null,
-      iat: decoded.iat || null,
-      exp: decoded.exp || null,
-      azp: decoded.azp || null,
-      scope: decoded.scope || null
+
+    const skip = Number(req.query.skip) || Number(0);
+    const take = Number(req.query.limit) || Number(100);
+
+    const watches = await repo.find({
+      skip: Number(skip),
+      take: Number(take)
+    });
+
+    if (watches === undefined || watches.length === 0) {
+      APILogger.logger.info(`[GET][/watches]: failed to find any watches`);
+      return res.status(404).send(`Failed to find watches`)
     }
-    const ownerId = tokenPayload.sub;
+    return res.status(200).send(watches);
 
-    // Have to grab the tenements with the correct parent owner
-    // repo.find will return an object, as opposed to undefined which will not be caught
-    const tenements = await repo.find({where: {ownerId: ownerId}, relations:['tenement']})
-    APILogger.logger.info(`[GET][/watch][Returned Object]:${tenements}`);
-    // const type = typeof tenements;
+  }catch(error){
+    APILogger.logger.info(`[GET][/watches][ERROR]${error}`);
+    return res.status(500).send(error);
+  }
+}
+export let getWatchesByOwner = async (req: Request, res: Response, next: NextFunction) => {
+  try{
+    const connection = await connect();
+    const repo = await connection.getRepository(WatchedTenements);
 
-    // APILogger.logger.info(`[GET][/watch][Returned TYPE]:${type}`);
+    const ownerId = req.params.id;
+    const skip = Number(req.query.skip) || Number(0);
+    const take = Number(req.query.limit) || Number(100);
 
-    if(tenements === undefined || tenements.length === 0){
-      APILogger.logger.info(`[GET][/watch]: failed to find any tenements with ownerId: ${ownerId}`);
+    const watches = await repo.find({
+      where: { ownerId: ownerId},
+      skip: Number(skip),
+      take: Number(take)
+    });
+
+    if (watches === undefined || watches.length === 0) {
+      APILogger.logger.info(`[GET][/watches/owner/:id]: failed to find any watched tenements with ownerId: ${ownerId}`);
       return res.status(404).send(`No watched tenements with ownerId ${ownerId}`)
     }
-    APILogger.logger.info(`[GET][/watch]: Returned tenements to ${ownerId}`);
-    return res.status(200).send(tenements);
+    return res.status(200).send(watches);
 
   }catch(error){
-    APILogger.logger.info(`[GET][/watch][ERROR]${error}`);
+    APILogger.logger.info(`[GET][/watchedTenements][ERROR]${error}`);
     return res.status(500).send(error);
+
   }
 }
-
 export let addWatchedTenement = async (req:Request, res: Response, next:NextFunction)=>{
   try{
     const connection = await connect();
