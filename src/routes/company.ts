@@ -16,7 +16,11 @@ export class CompanyRoute {
       )
     app.route('/companies').get(
       authMiddleware,
-      companyController.getCompany
+      companyController.getCompanies
+      )
+    app.route('/companies/:id').get(
+      authMiddleware,
+      companyController.getCompanyById
       )
   }
 }
