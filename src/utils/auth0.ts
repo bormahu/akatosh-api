@@ -1,6 +1,6 @@
 import { auth } from 'express-oauth2-jwt-bearer';
-
+import { auth0_base_url, auth0_domain } from "../config";
 export const authMiddleware = auth({
-    audience: process.env.AUTH0_DOMAIN,
-    issuerBaseURL: process.env.AUTH0_ISSUER_BASE
+    audience: auth0_domain,
+    issuerBaseURL: auth0_base_url
 });
