@@ -5,25 +5,45 @@ import { connect } from '../database';
 import { Company } from '../entities/Company';
 import { APILogger } from '../utils/logger';
 
-export let getCompany = async (req: Request, res:Response, next: NextFunction) => {
+export let getCompanies = async (req:Request, res: Response, next:NextFunction)=> {
   try{
     const connection = await connect();
-
     const repo = await connection.getRepository(Company);
 
-    const companyName = req.query.companyName;
-    APILogger.logger.info(`[GET][/company][request query] ${companyName}`);
+    const skip = Number(req.query.skip) || Number(0);
+    const take = Number(req.query.take) || Number(100);
 
-    const company = await repo.findOne({where: {companyName: companyName}});
+    const companies = await repo.find({
+      skip: Number(skip),
+      take: Number(take)
+    });
 
+    if (companies === undefined || companies.length === 0) {
+      APILogger.logger.info(`[GET][/companies]: failed to find any companies`);
+      return res.status(404).send(`Failed to find any companies`)
+    }
+    return res.status(200).send(companies);
+
+  }catch(error){
+    APILogger.logger.info(`[GET][/companies][ERROR]${error}`);
+    return res.status(500).send(error);
+  }
+}
+export let getCompanyById = async (req:Request, res: Response, next:NextFunction)=>{
+  try{
+    const connection = await connect();
+    const repo = await connection.getRepository(Company);
+
+    const companyId = req.params.id;
+    const company = await repo.findOne({where: {companyId: companyId}});
     if(company === undefined){
-      APILogger.logger.info(`[GET][/company]: failed to find company: ${companyName}`);
-      return res.status(404).send(`${companyName} does not exist`);
+      APILogger.logger.info(`[GET][/company/:id]: failed to find any company with companyId: ${companyId}`);
+      return res.status(404).send(`No company with id ${companyId}`)
     }
     return res.status(200).send(company);
 
-  } catch(error){
-    APILogger.logger.info(`[GET][/company][ERROR]${error}`);
+  }catch(error){
+    APILogger.logger.info(`[GET][/companies][ERROR]${error}`);
     return res.status(500).send(error);
   }
 }
