@@ -4,57 +4,50 @@ import { v4 as uuidv4 } from 'uuid';
 import { connect } from '../database';
 import { GlobalTenements } from '../entities/GlobalTenements';
 import {APILogger} from '../utils/logger';
+import jwt_decode from "jwt-decode";
 
-export let getTenement = async (req:Request, res: Response, next:NextFunction)=> {
+export let getTenements = async (req:Request, res: Response, next:NextFunction)=> {
     try{
         const connection = await connect();
         const repo = await connection.getRepository(GlobalTenements);
-  
-        const tenementId = req.query.tenementId
-        // Have to grab the tenements with the correct parent owner
-        const tenement = await repo.findOne({where: {tenementId: tenementId}})
-        APILogger.logger.info(`[GET][/globaltenements]:${tenementId}`);
-    
-        if(tenement === undefined){
-            APILogger.logger.info(`[GET][/globaltenements]: failed to find any tenements with owner_id: ${tenementId}`);
-            return res.status(404).send(`No watched tenements with tenementId ${tenementId}`)
+
+        const skip = Number(req.query.skip) || Number(0);
+        const take = Number(req.query.limit) || Number(100);
+
+        const tenements = await repo.find({
+            skip: Number(skip),
+            take: Number(take)
+        });
+
+        if (tenements === undefined || tenements.length === 0) {
+            APILogger.logger.info(`[GET][/tenements]: failed to find any tenements`);
+            return res.status(404).send(`Failed to find any tenements`)
         }
-        APILogger.logger.info(`[GET][/globaltenements]: Returned tenements to ${tenementId}`);
-        return res.status(200).send(tenement);
-  
+        return res.status(200).send(tenements);
+
     }catch(error){
       APILogger.logger.info(`[GET][/globaltenements][ERROR]${error}`);
       return res.status(500).send(error);
     }
   }
-  export let getTenements = async (req:Request, res: Response, next:NextFunction) =>{
+export let getTenement = async (req:Request, res: Response, next:NextFunction)=>{
+  try{
+    const connection = await connect();
+    const repo = await connection.getRepository(GlobalTenements);
 
-    try{
-      const connection = await connect();
-      const repo = await connection.getRepository(GlobalTenements);
-
-      const offset = req.query.offset;
-      const limit = req.query.limit;
-
-      // find the tenements with an offset and a limit in typeorm 
-      const tenements = await repo.find({
-        skip: Number(offset),
-        take: Number(limit)
-      });
-      APILogger.logger.info(`[GET][/paginatedTenements]: Getting values from ${offset} to ${limit}`);
-
-      if(tenements ===undefined || tenements.length === 0){
-        APILogger.logger.info(`[GET][/paginatedTenements]: No tenements found`);
-        return res.status(404).send(`No tenements found`);
-      }
-      APILogger.logger.info(`[GET][/paginatedTenements]: Returned tenements to user from ${offset} to ${limit}`);
-      return res.status(200).send(tenements);
-
-    }catch (error) {
-        APILogger.logger.info(`[GET][/paginatedTenements][ERROR]${error}`);
-        return res.status(500).send(error);
-      } 
+    const tenementId = req.params.id;
+    const tenement = await repo.findOne({where: {tenementId: tenementId}});
+    
+    if(tenement === undefined){
+      APILogger.logger.info(`[GET][/tenement/:id]: failed to find any tenement with tenementId: ${tenementId}`);
+      return res.status(404).send(`No tenement with id ${tenementId}`)
+    }
+    return res.status(200).send(tenement);
+    }catch(error){
+      APILogger.logger.info(`[GET][/globaltenements][ERROR]${error}`);
+      return res.status(500).send(error);
   }
+}
   export let updateGlobalTenement = async (req:Request, res: Response, next:NextFunction)=>{
     // route to update a tenement
     try{
@@ -73,14 +66,9 @@ export let getTenement = async (req:Request, res: Response, next:NextFunction)=>
       tenement.surveyStatus = req.body.data.surveyStatus || tenement.surveyStatus;
       tenement.tenementStatus = req.body.data.tenementStatus || tenement.tenementStatus;
 
-    
-
-
       await repo.save(tenement);
       return res.status(204).send();
       
-
-
     }catch(error){
       APILogger.logger.info(`[PATCH][/globaltenements][ERROR]${error}`);
       return res.status(500).send(error);
