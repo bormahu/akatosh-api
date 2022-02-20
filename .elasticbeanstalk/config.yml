@@ -3,13 +3,13 @@ branch-defaults:
     environment: akatosh-api
     group_suffix: null
   main:
-    environment: akatosh-api-prod
+    environment: akatosh-production-api
     group_suffix: null
 global:
-  application_name: akatosh-api
+  application_name: akatosh-production-api
   branch: null
   default_ec2_keyname: null
-  default_platform: Docker running on 64bit Amazon Linux 2
+  default_platform: Docker
   default_region: eu-west-1
   include_git_submodules: true
   instance_profile: null
