@@ -14,8 +14,6 @@ export let getTenements = async (req:Request, res: Response, next:NextFunction)=
         const skip = Number(req.query.skip) || Number(0);
         const take = Number(req.query.limit) || Number(100);
 
-<<<<<<< HEAD
-=======
         // Cycle through the queries and add them to a whereClause object as long as they are not skip or limit
         let whereClause = {};
         for (const key in req.query) {
@@ -26,7 +24,6 @@ export let getTenements = async (req:Request, res: Response, next:NextFunction)=
         }
         const amount = await repo.createQueryBuilder('tenementsAmount').select('COUNT(*)', 'amount').getRawOne();
 
->>>>>>> 41fdea9 (Add parser for multiple queries)
         const tenements = await repo.find({
             where: whereClause,
             skip: Number(skip),
