@@ -61,6 +61,8 @@ export let getWatchesByOwner = async (req: Request, res: Response, next: NextFun
     const skip = Number(req.query.skip) || Number(0);
     const take = Number(req.query.limit) || Number(100);
 
+    const amountWatches = await repo.createQueryBuilder('watchesAmount').select('COUNT(*)', 'amount').where('ownerId = :ownerId', {ownerId: ownerId}).getRawOne();
+    
     const watches = await repo.find({
       where: { ownerId: ownerId},
       skip: Number(skip),
@@ -71,7 +73,12 @@ export let getWatchesByOwner = async (req: Request, res: Response, next: NextFun
       APILogger.logger.info(`[GET][/watches/owner/:id]: failed to find any watched tenements with ownerId: ${ownerId}`);
       return res.status(404).send(`No watched tenements with ownerId ${ownerId}`)
     }
-    return res.status(200).send(watches);
+    const returnObj = {
+      amount: amountWatches.amount,
+      watches: watches
+    }
+
+    return res.status(200).send(returnObj);
 
   }catch(error){
     APILogger.logger.info(`[GET][/watchedTenements][ERROR]${error}`);
