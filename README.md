@@ -4,16 +4,22 @@ REST api for interacting with tenements data.
 ## 🅱️ Note
 It's been a while since I've touched this. Might not work perfectly out of the box.
 ## Installation
-$ git clone ^ this repo
-$ cd project
-$ npm install
+```bash
+git clone https://github.com/bormahu/akatosh-api.git
+cd akatosh-api
+npm install
+```
 
 ## Run in dev mode
+```bash
 $ npm run dev
+```
 
 ## Run in prod mode
+```bash
 $ npm run build
 $ npm run start
+```
 
 ## Project structure
 
